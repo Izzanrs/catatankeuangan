@@ -57,7 +57,7 @@
                     <p class="text-slate-500 text-[13px] font-medium mb-0.5">Hi, <span id="family-id-display">Connecting...</span></p>
                     <h1 id="header-family-name" class="text-xl font-extrabold text-slate-900 tracking-tight">Keluarga 👋</h1>
                 </div>
-                <button onclick="window.showModal('family-modal')" class="w-12 h-12 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center shadow-sm active:scale-95 transition-transform">
+                <button onclick="window.openFamilyModal()" class="w-12 h-12 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center shadow-sm active:scale-95 transition-transform">
                     <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                 </button>
             </div>
@@ -171,7 +171,7 @@
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                 <span class="text-[10px] font-bold">Cards</span>
             </button>
-            <button onclick="window.showModal('family-modal')" class="flex flex-col items-center justify-center w-16 text-slate-400 hover:text-slate-900 transition-colors">
+            <button onclick="window.openFamilyModal()" class="flex flex-col items-center justify-center w-16 text-slate-400 hover:text-slate-900 transition-colors">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                 <span class="text-[10px] font-bold">Account</span>
             </button>
@@ -309,18 +309,31 @@
         <img id="receipt-img-view" src="" alt="Struk" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl">
     </div>
 
-    <!-- MODAL FAMILY ACCOUNT (Settings) -->
+    <!-- MODAL FAMILY ACCOUNT (Settings / Profile) -->
     <div id="family-modal" class="modal fixed inset-0 z-[60] invisible opacity-0 bg-slate-900/40 flex items-center justify-center p-5 backdrop-blur-sm">
-        <div class="modal-content bg-white w-full max-w-sm rounded-[32px] p-8 shadow-2xl relative text-center">
+        <div class="modal-content bg-white w-full max-w-sm rounded-[32px] p-8 shadow-2xl relative text-center max-h-[90vh] overflow-y-auto hide-scrollbar">
             <button onclick="window.hideModal('family-modal')" class="absolute top-5 right-5 p-2 bg-slate-100 rounded-full text-slate-500">
                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
             </button>
             <div class="w-16 h-16 bg-slate-100 text-slate-900 rounded-[20px] mx-auto flex items-center justify-center mb-5">
                 <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </div>
-            <h2 class="text-xl font-extrabold text-slate-900 mb-2">Sinkronisasi Akun</h2>
+            <h2 class="text-xl font-extrabold text-slate-900 mb-2">Akun Saya</h2>
             <p class="text-[13px] text-slate-500 mb-6 leading-relaxed">Berikan ID ini ke perangkat lain untuk menghubungkan catatan keuangan.</p>
-            
+
+            <!-- Status Akun -->
+            <div class="mb-5 text-left bg-slate-50 p-4 rounded-[20px] border border-slate-100">
+                <div class="flex items-center justify-between mb-1.5">
+                    <label class="text-[11px] text-slate-400 font-bold uppercase tracking-widest">Status Akun</label>
+                    <span id="account-status-badge" class="text-[11px] font-black px-2.5 py-1 rounded-full bg-slate-200 text-slate-700">-</span>
+                </div>
+                <p id="account-status-detail" class="text-[12px] text-slate-500 font-medium mb-3">-</p>
+                <button id="btn-link-google" onclick="window.linkGoogleAccount()" class="hidden w-full bg-slate-900 text-white font-bold py-3 rounded-xl active:scale-95 transition-transform text-[13px] flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Tautkan ke Google
+                </button>
+            </div>
+
             <!-- Tambahan Form Edit Nama Profil -->
             <div class="mb-5 text-left bg-slate-50 p-4 rounded-[20px] border border-slate-100">
                 <label class="text-[11px] text-slate-400 font-bold mb-2 block uppercase tracking-widest">Nama Profil / Keluarga</label>
@@ -339,6 +352,15 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Anggota Keluarga -->
+            <div class="mb-6 text-left">
+                <label class="text-[11px] text-slate-400 font-bold mb-2 block uppercase tracking-widest px-1">Anggota Keluarga</label>
+                <div id="family-members-list" class="space-y-2">
+                    <p class="text-[12px] text-slate-400 font-medium px-1">Memuat...</p>
+                </div>
+            </div>
+
             <button onclick="window.logout()" class="text-[13px] text-red-500 font-bold underline underline-offset-4">Sign Out (Reset Perangkat)</button>
         </div>
     </div>
@@ -360,6 +382,10 @@
                     <svg class="w-6 h-6" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                     Lanjutkan dengan Google
                 </button>
+                <button onclick="window.loginAnonymous()" class="w-full bg-slate-50 border border-slate-200 text-slate-600 font-bold py-4 rounded-[20px] hover:bg-slate-100 active:scale-95 transition-all text-[14px]">
+                    Gunakan Tanpa Login (Anonim)
+                </button>
+                <p class="text-[11px] text-slate-400 leading-relaxed px-2">Mode anonim cocok untuk coba-coba. Data bisa hilang jika Anda ganti perangkat atau Sign Out tanpa menautkan akun Google.</p>
             </div>
 
             <!-- STEP 2: FAMILY SETUP -->
@@ -388,7 +414,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, linkWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -401,7 +427,7 @@
             measurementId: "G-8CBM3MVH2Q"
         };
 
-        let app, auth, db, currentUser = null, unsubscribe = null;
+        let app, auth, db, currentUser = null, unsubscribe = null, unsubscribeMembers = null;
         let familyId = localStorage.getItem('familyId');
         let currentTxType = 'expense';
         let allWalletsData = {}; 
@@ -419,6 +445,7 @@
         window.showModal = (id) => { const el = document.getElementById(id); el.classList.remove('invisible'); el.classList.add('active'); };
         window.hideModal = (id) => { const el = document.getElementById(id); el.classList.remove('active'); setTimeout(() => el.classList.add('invisible'), 300); };
         window.viewReceipt = (b64) => { document.getElementById('receipt-img-view').src = b64; window.showModal('receipt-modal'); };
+        window.openFamilyModal = () => { window.updateAccountStatusUI(); window.showModal('family-modal'); };
         
         const showToast = (msg, type = 'success') => {
             const toast = document.getElementById('toast-container');
@@ -637,6 +664,68 @@
             });
         }
 
+        // Render daftar Anggota Keluarga di Profile
+        function renderFamilyMembers(members) {
+            const container = document.getElementById('family-members-list');
+            if (!members || members.length === 0) {
+                container.innerHTML = `<p class="text-[12px] text-slate-400 font-medium px-1">Belum ada anggota lain.</p>`;
+                return;
+            }
+            container.innerHTML = members.map(m => {
+                const isAnon = !!m.isAnonymous;
+                const label = isAnon ? 'Anonim (belum login)' : (m.email || 'Tanpa email');
+                const initials = (m.displayName || m.email || 'AN').substring(0, 2).toUpperCase();
+                const badgeClass = isAnon ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600';
+                const badgeText = isAnon ? 'Anonim' : 'Google';
+                const youTag = (currentUser && m.uid === currentUser.uid) ? '<span class="text-[10px] font-bold text-slate-400 ml-1">(Anda)</span>' : '';
+                const nameStr = m.displayName ? m.displayName : label;
+                return `
+                <div class="flex items-center justify-between bg-white border border-slate-100 rounded-2xl p-3.5 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-black text-[11px] shrink-0">${initials}</div>
+                        <div class="text-left">
+                            <p class="text-[13px] font-bold text-slate-900 leading-tight">${nameStr}${youTag}</p>
+                            <p class="text-[11px] text-slate-400 font-medium">${m.displayName ? label : ''}</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badgeClass}">${badgeText}</span>
+                </div>`;
+            }).join('');
+        }
+
+        // Tulis / perbarui info user di family members
+        async function upsertMemberInfo() {
+            if (!currentUser || !familyId) return;
+            try {
+                await setDoc(doc(db, 'families', familyId, 'members', currentUser.uid), {
+                    uid: currentUser.uid,
+                    email: currentUser.email || null,
+                    displayName: currentUser.displayName || null,
+                    isAnonymous: !!currentUser.isAnonymous,
+                    lastActive: new Date().toISOString()
+                }, { merge: true });
+            } catch (e) { console.error('Gagal menyimpan info anggota', e); }
+        }
+
+        // Update tampilan status akun (Anonim / Google) di Profile
+        window.updateAccountStatusUI = () => {
+            if (!currentUser) return;
+            const badge = document.getElementById('account-status-badge');
+            const detail = document.getElementById('account-status-detail');
+            const linkBtn = document.getElementById('btn-link-google');
+            if (currentUser.isAnonymous) {
+                badge.textContent = 'Anonim';
+                badge.className = 'text-[11px] font-black px-2.5 py-1 rounded-full bg-amber-100 text-amber-700';
+                detail.textContent = 'Anda belum login dengan akun Google. Tautkan sekarang agar data tidak hilang.';
+                linkBtn.classList.remove('hidden');
+            } else {
+                badge.textContent = 'Google';
+                badge.className = 'text-[11px] font-black px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700';
+                detail.textContent = currentUser.email || 'Login dengan Google';
+                linkBtn.classList.add('hidden');
+            }
+        };
+
         window.submitTransaction = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit'); btn.innerHTML = "Menyimpan..."; btn.disabled = true;
@@ -686,7 +775,7 @@
             }
         };
 
-        // --- SISTEM AUTENTIKASI BARU (GOOGLE) ---
+        // --- SISTEM AUTENTIKASI (GOOGLE + ANONIM) ---
 
         async function checkUserFamilyStatus(user) {
             try {
@@ -700,11 +789,10 @@
                     document.getElementById('setup-modal').classList.add('hidden');
                     loadFamilyData();
                 } else if (familyId) {
-                    // User sebelumnya pakai mode Anonim (ada familyId lama), tautkan ke akun Google-nya!
+                    // User sebelumnya sudah punya familyId lokal (mis. dari sesi anonim), tautkan ke profil user ini
                     await setDoc(userDocRef, { familyId: familyId }, { merge: true });
                     document.getElementById('setup-modal').classList.add('hidden');
                     loadFamilyData();
-                    showToast("Akun lama berhasil ditautkan ke Google!");
                 } else {
                     // User baru, belum punya keluarga, tampilkan form Buat/Gabung Keluarga
                     document.getElementById('step-login').classList.add('hidden');
@@ -727,9 +815,41 @@
             }
         };
 
+        // Login tanpa akun (Anonim)
+        window.loginAnonymous = async () => {
+            try {
+                const result = await signInAnonymously(auth);
+                currentUser = result.user;
+                await checkUserFamilyStatus(currentUser);
+            } catch (error) {
+                console.error(error);
+                showToast("Gagal masuk sebagai Anonim", "error");
+            }
+        };
+
+        // Tautkan sesi Anonim yang sedang berjalan ke akun Google (tanpa kehilangan data)
+        window.linkGoogleAccount = async () => {
+            try {
+                const result = await linkWithPopup(auth.currentUser, provider);
+                currentUser = result.user;
+                await upsertMemberInfo();
+                window.updateAccountStatusUI();
+                showToast("Akun berhasil ditautkan ke Google!");
+            } catch (error) {
+                console.error(error);
+                if (error.code === 'auth/credential-already-in-use') {
+                    showToast("Akun Google ini sudah dipakai di perangkat/keluarga lain", "error");
+                } else {
+                    showToast("Gagal menautkan akun", "error");
+                }
+            }
+        };
+
         function loadFamilyData() {
             document.getElementById('family-id-display').textContent = familyId;
             document.getElementById('modal-family-id').textContent = familyId;
+            window.updateAccountStatusUI();
+            upsertMemberInfo();
             
             onSnapshot(doc(db, 'families', familyId), (docSnap) => {
                 if(docSnap.exists()) {
@@ -738,6 +858,12 @@
                     document.getElementById('header-family-name').innerHTML = `${name} 👋`;
                     document.getElementById('input-family-name').value = name;
                 }
+            });
+
+            if (unsubscribeMembers) unsubscribeMembers();
+            unsubscribeMembers = onSnapshot(collection(db, 'families', familyId, 'members'), (snapshot) => {
+                const members = []; snapshot.forEach(d => members.push(d.data()));
+                renderFamilyMembers(members);
             });
 
             const q = query(collection(db, 'families', familyId, 'transactions'), orderBy('timestamp', 'desc'));
@@ -758,7 +884,7 @@
                         currentUser = user;
                         await checkUserFamilyStatus(user);
                     } else {
-                        // Belum login, pastikan tombol Google muncul
+                        // Belum login, pastikan tombol Google/Anonim muncul
                         currentUser = null;
                         document.getElementById('setup-modal').classList.remove('hidden');
                         document.getElementById('step-login').classList.remove('hidden');
@@ -780,7 +906,7 @@
             localStorage.setItem('familyId', familyId);
             document.getElementById('setup-modal').classList.add('hidden'); 
             loadFamilyData(); 
-            setTimeout(() => window.showModal('family-modal'), 500);
+            setTimeout(() => window.openFamilyModal(), 500);
         };
         
         window.joinFamily = async () => {
@@ -805,12 +931,23 @@
 
         window.copyFamilyId = () => { navigator.clipboard.writeText(familyId); showToast("ID disalin!"); };
         
-        window.logout = async () => { 
-            if(confirm("Yakin ingin Sign Out dari akun Google?")) { 
-                await signOut(auth);
-                localStorage.removeItem('familyId'); 
-                location.reload(); 
-            } 
+        // Sign Out dengan peringatan khusus untuk akun Anonim
+        window.logout = async () => {
+            if (currentUser && currentUser.isAnonymous) {
+                const proceed = confirm(
+                    "PERINGATAN: Akun Anda masih Anonim (belum ditautkan ke Google).\n\n" +
+                    "Jika Sign Out sekarang, SEMUA data keuangan di perangkat ini berisiko HILANG dan tidak bisa dipulihkan.\n\n" +
+                    "Tekan OK untuk tetap lanjut Sign Out, atau Cancel untuk membatalkan dan menautkan akun Google dulu."
+                );
+                if (!proceed) return;
+                const doubleCheck = confirm("Konfirmasi sekali lagi: data anonim akan hilang permanen. Tetap Sign Out?");
+                if (!doubleCheck) return;
+            } else {
+                if (!confirm("Yakin ingin Sign Out dari akun Google?")) return;
+            }
+            await signOut(auth);
+            localStorage.removeItem('familyId');
+            location.reload();
         };
 
         window.addEventListener('load', initApp);
