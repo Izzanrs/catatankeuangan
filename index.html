@@ -334,7 +334,7 @@
                 </button>
             </div>
 
-            <!-- Tambahan Form Edit Nama Profil -->
+            <!-- Form Edit Nama Profil -->
             <div class="mb-5 text-left bg-slate-50 p-4 rounded-[20px] border border-slate-100">
                 <label class="text-[11px] text-slate-400 font-bold mb-2 block uppercase tracking-widest">Nama Profil / Keluarga</label>
                 <div class="flex gap-2">
@@ -366,7 +366,7 @@
     </div>
 
     <!-- MODAL SETUP AWAL -->
-    <div id="setup-modal" class="modal fixed inset-0 z-[80] invisible opacity-100 bg-white flex flex-col justify-center p-6">
+    <div id="setup-modal" class="modal fixed inset-0 z-[80] invisible opacity-0 bg-white flex flex-col justify-center p-6">
         <div class="max-w-md w-full mx-auto text-center space-y-8">
             <div class="w-24 h-24 bg-slate-900 text-white rounded-[32px] mx-auto flex items-center justify-center shadow-2xl">
                 <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
@@ -786,17 +786,18 @@
                     // User sudah pernah login dan punya ID keluarga
                     familyId = userDoc.data().familyId;
                     localStorage.setItem('familyId', familyId);
-                    document.getElementById('setup-modal').classList.add('hidden');
+                    window.hideModal('setup-modal');
                     loadFamilyData();
                 } else if (familyId) {
                     // User sebelumnya sudah punya familyId lokal (mis. dari sesi anonim), tautkan ke profil user ini
                     await setDoc(userDocRef, { familyId: familyId }, { merge: true });
-                    document.getElementById('setup-modal').classList.add('hidden');
+                    window.hideModal('setup-modal');
                     loadFamilyData();
                 } else {
                     // User baru, belum punya keluarga, tampilkan form Buat/Gabung Keluarga
                     document.getElementById('step-login').classList.add('hidden');
                     document.getElementById('step-family').classList.remove('hidden');
+                    window.showModal('setup-modal');
                 }
             } catch (e) {
                 console.error(e);
@@ -884,11 +885,11 @@
                         currentUser = user;
                         await checkUserFamilyStatus(user);
                     } else {
-                        // Belum login, pastikan tombol Google/Anonim muncul
+                        // Belum login, TAMPILKAN modal setup menutupi seluruh layar
                         currentUser = null;
-                        document.getElementById('setup-modal').classList.remove('hidden');
                         document.getElementById('step-login').classList.remove('hidden');
                         document.getElementById('step-family').classList.add('hidden');
+                        window.showModal('setup-modal');
                     }
                 });
             } catch (e) { showToast("Gagal koneksi. Refresh halaman.", "error"); }
@@ -904,7 +905,7 @@
             await setDoc(doc(db, 'users', currentUser.uid), { familyId: familyId }, { merge: true });
             
             localStorage.setItem('familyId', familyId);
-            document.getElementById('setup-modal').classList.add('hidden'); 
+            window.hideModal('setup-modal'); 
             loadFamilyData(); 
             setTimeout(() => window.openFamilyModal(), 500);
         };
@@ -921,7 +922,7 @@
                     await setDoc(doc(db, 'users', currentUser.uid), { familyId: familyId }, { merge: true });
                     
                     localStorage.setItem('familyId', familyId); 
-                    document.getElementById('setup-modal').classList.add('hidden'); 
+                    window.hideModal('setup-modal'); 
                     loadFamilyData(); 
                     showToast("Login Success!"); 
                 } 
