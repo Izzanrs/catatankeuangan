@@ -64,9 +64,13 @@
 
             <p class="text-slate-500 text-[13px] font-semibold mb-1">Available balance</p>
             <div class="flex items-center justify-between mb-8">
-                <h2 id="total-balance-alltime" class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">Rp 0</h2>
-                <!-- Icon Mata (Opsional) -->
-                <button class="text-slate-400 p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                <h2 id="total-balance-alltime" class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter transition-all">Rp 0</h2>
+                <!-- Icon Mata -->
+                <button onclick="window.toggleBalanceVisibility()" class="text-slate-400 p-2 hover:bg-slate-50 rounded-full active:scale-95 transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="eye-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                </button>
             </div>
 
             <!-- Action Buttons -->
@@ -349,20 +353,31 @@
                 <h1 class="text-3xl font-black text-slate-900 mb-3 tracking-tight">Welcome to Finsave</h1>
                 <p class="text-[14px] text-slate-500 leading-relaxed font-medium">Smart spending, bigger savings. Hubungkan akun Anda dengan keluarga.</p>
             </div>
-            <div class="space-y-4 pt-4">
+            
+            <!-- STEP 1: LOGIN -->
+            <div id="step-login" class="space-y-4 pt-4">
+                <button onclick="window.loginWithGoogle()" class="w-full bg-white border border-slate-200 text-slate-900 font-bold py-4 rounded-[20px] shadow-sm flex items-center justify-center gap-3 hover:bg-slate-50 active:scale-95 transition-all">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Lanjutkan dengan Google
+                </button>
+            </div>
+
+            <!-- STEP 2: FAMILY SETUP -->
+            <div id="step-family" class="hidden space-y-4 pt-4">
                 <button id="btn-create-family" onclick="window.createFamily()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-[20px] shadow-xl hover:bg-slate-800 active:scale-95 transition-all">
-                    Get Started (Buat Akun)
+                    Buat Keluarga Baru
                 </button>
                 <div class="relative flex items-center py-2">
-                    <div class="flex-grow border-t border-slate-200"></div><span class="mx-4 text-slate-400 text-xs font-bold uppercase tracking-wider">OR</span><div class="flex-grow border-t border-slate-200"></div>
+                    <div class="flex-grow border-t border-slate-200"></div><span class="mx-4 text-slate-400 text-xs font-bold uppercase tracking-wider">ATAU</span><div class="flex-grow border-t border-slate-200"></div>
                 </div>
                 <div class="bg-slate-50 p-5 rounded-[24px] border border-slate-100">
-                    <input type="text" id="join-id-input" placeholder="Enter Family ID..." class="w-full px-5 py-4 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-slate-400 text-center text-lg font-black tracking-widest mb-4 uppercase text-slate-900">
+                    <input type="text" id="join-id-input" placeholder="Masukkan ID Keluarga" class="w-full px-5 py-4 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-slate-400 text-center text-lg font-black tracking-widest mb-4 uppercase text-slate-900">
                     <button id="btn-join-family" onclick="window.joinFamily()" class="w-full bg-white border-2 border-slate-900 text-slate-900 font-bold py-3.5 rounded-xl active:bg-slate-50 transition-colors">
-                        Log In (Gabung)
+                        Gabung Keluarga
                     </button>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -373,7 +388,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -392,6 +407,11 @@
         let allWalletsData = {}; 
         let rawTransactions = [];
         let myChart = null;
+        let isBalanceVisible = true;
+        let actualTotalBalanceStr = "Rp 0";
+
+        // Inisialisasi Google Provider
+        const provider = new GoogleAuthProvider();
 
         const today = new Date();
         document.getElementById('month-filter').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
@@ -407,6 +427,20 @@
             toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000);
         };
         const formatRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
+
+        window.toggleBalanceVisibility = () => {
+            isBalanceVisible = !isBalanceVisible;
+            const el = document.getElementById('total-balance-alltime');
+            const iconPath = document.getElementById('eye-icon-path');
+
+            if (isBalanceVisible) {
+                el.textContent = actualTotalBalanceStr;
+                iconPath.setAttribute('d', 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z');
+            } else {
+                el.textContent = 'Rp •••••••';
+                iconPath.setAttribute('d', 'M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21');
+            }
+        };
 
         window.handleMonthChange = () => renderData();
 
@@ -547,9 +581,16 @@
             document.getElementById('total-expense').textContent = formatRp(tExpense);
             document.getElementById('modal-total-expense').textContent = formatRp(tExpense);
             
-            // Format Saldo Utama mirip $82,758.10
+            // Format Saldo Utama dan jalankan Toggle Visibility
             const formattedTotal = formatRp(tKekayaan).replace('Rp', 'Rp ');
-            document.getElementById('total-balance-alltime').innerHTML = formattedTotal;
+            actualTotalBalanceStr = formattedTotal;
+            
+            // Update UI Saldo berdasarkan status mata terbuka/tertutup
+            if (isBalanceVisible) {
+                document.getElementById('total-balance-alltime').innerHTML = actualTotalBalanceStr;
+            } else {
+                document.getElementById('total-balance-alltime').innerHTML = 'Rp •••••••';
+            }
             
             initChart(monthlyCategoryData);
             renderDashboardWallets();
@@ -645,11 +686,51 @@
             }
         };
 
+        // --- SISTEM AUTENTIKASI BARU (GOOGLE) ---
+
+        async function checkUserFamilyStatus(user) {
+            try {
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                if (userDoc.exists() && userDoc.data().familyId) {
+                    // User sudah pernah login dan punya ID keluarga
+                    familyId = userDoc.data().familyId;
+                    localStorage.setItem('familyId', familyId);
+                    document.getElementById('setup-modal').classList.add('hidden');
+                    loadFamilyData();
+                } else if (familyId) {
+                    // User sebelumnya pakai mode Anonim (ada familyId lama), tautkan ke akun Google-nya!
+                    await setDoc(userDocRef, { familyId: familyId }, { merge: true });
+                    document.getElementById('setup-modal').classList.add('hidden');
+                    loadFamilyData();
+                    showToast("Akun lama berhasil ditautkan ke Google!");
+                } else {
+                    // User baru, belum punya keluarga, tampilkan form Buat/Gabung Keluarga
+                    document.getElementById('step-login').classList.add('hidden');
+                    document.getElementById('step-family').classList.remove('hidden');
+                }
+            } catch (e) {
+                console.error(e);
+                showToast("Gagal memeriksa data user", "error");
+            }
+        }
+
+        window.loginWithGoogle = async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                currentUser = result.user;
+                await checkUserFamilyStatus(currentUser);
+            } catch (error) {
+                console.error(error);
+                showToast("Gagal login dengan Google", "error");
+            }
+        };
+
         function loadFamilyData() {
             document.getElementById('family-id-display').textContent = familyId;
             document.getElementById('modal-family-id').textContent = familyId;
             
-            // Listener Realtime untuk Nama Keluarga
             onSnapshot(doc(db, 'families', familyId), (docSnap) => {
                 if(docSnap.exists()) {
                     const data = docSnap.data();
@@ -666,33 +747,40 @@
             });
         }
 
-        async function doAuth() {
-            app = initializeApp(firebaseConfig); auth = getAuth(app); db = getFirestore(app);
-            return new Promise((resolve, reject) => {
-                const unsub = onAuthStateChanged(auth, async (u) => {
-                    unsub(); if (u) { currentUser = u; resolve(); } else { try { currentUser = (await signInAnonymously(auth)).user; resolve(); } catch(e) { reject(e); } }
-                });
-            });
-        }
-
         async function initApp() {
             try {
-                await doAuth();
-                if (familyId) {
-                    try { const docSnap = await getDoc(doc(db, 'families', familyId));
-                        if(docSnap.exists()) { document.getElementById('setup-modal').classList.add('hidden'); loadFamilyData(); } 
-                        else { localStorage.removeItem('familyId'); familyId = null; window.showModal('setup-modal'); }
-                    } catch(e) { document.getElementById('setup-modal').classList.add('hidden'); loadFamilyData(); }
-                } else { window.showModal('setup-modal'); }
+                app = initializeApp(firebaseConfig); 
+                auth = getAuth(app); 
+                db = getFirestore(app);
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        currentUser = user;
+                        await checkUserFamilyStatus(user);
+                    } else {
+                        // Belum login, pastikan tombol Google muncul
+                        currentUser = null;
+                        document.getElementById('setup-modal').classList.remove('hidden');
+                        document.getElementById('step-login').classList.remove('hidden');
+                        document.getElementById('step-family').classList.add('hidden');
+                    }
+                });
             } catch (e) { showToast("Gagal koneksi. Refresh halaman.", "error"); }
         }
 
         window.createFamily = async () => {
             const btn = document.getElementById('btn-create-family'); btn.innerHTML = "Processing...";
             familyId = 'FAM-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            
+            // Simpan Data Keluarga
             await setDoc(doc(db, 'families', familyId), { createdBy: currentUser.uid, createdAt: new Date().toISOString() });
+            // Simpan Pemetaan di Profil User
+            await setDoc(doc(db, 'users', currentUser.uid), { familyId: familyId }, { merge: true });
+            
             localStorage.setItem('familyId', familyId);
-            document.getElementById('setup-modal').classList.add('hidden'); loadFamilyData(); setTimeout(() => window.showModal('family-modal'), 500);
+            document.getElementById('setup-modal').classList.add('hidden'); 
+            loadFamilyData(); 
+            setTimeout(() => window.showModal('family-modal'), 500);
         };
         
         window.joinFamily = async () => {
@@ -700,13 +788,30 @@
             if(!input) return showToast("Masukkan ID!", "error");
             try {
                 const docSnap = await getDoc(doc(db, 'families', input));
-                if(docSnap.exists()) { familyId = input; localStorage.setItem('familyId', familyId); document.getElementById('setup-modal').classList.add('hidden'); loadFamilyData(); showToast("Login Success!"); } 
+                if(docSnap.exists()) { 
+                    familyId = input; 
+                    
+                    // Simpan Pemetaan di Profil User
+                    await setDoc(doc(db, 'users', currentUser.uid), { familyId: familyId }, { merge: true });
+                    
+                    localStorage.setItem('familyId', familyId); 
+                    document.getElementById('setup-modal').classList.add('hidden'); 
+                    loadFamilyData(); 
+                    showToast("Login Success!"); 
+                } 
                 else { showToast("ID tidak ditemukan", "error"); }
             } catch(e) { showToast("Gagal memeriksa ID", "error"); }
         };
 
         window.copyFamilyId = () => { navigator.clipboard.writeText(familyId); showToast("ID disalin!"); };
-        window.logout = () => { if(confirm("Keluar dari perangkat ini?")) { localStorage.removeItem('familyId'); location.reload(); } };
+        
+        window.logout = async () => { 
+            if(confirm("Yakin ingin Sign Out dari akun Google?")) { 
+                await signOut(auth);
+                localStorage.removeItem('familyId'); 
+                location.reload(); 
+            } 
+        };
 
         window.addEventListener('load', initApp);
     </script>
