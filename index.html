@@ -824,22 +824,6 @@
                 // --- LOGIKA INTEGRASI APLIKASI HUTANG ---
                 const isDebt = document.getElementById('is-debt-tx').checked;
                 const debtId = document.getElementById('tx-debt-id').value;
-                const newDebtName = document.getElementById('tx-debt-new-name').value;
-
-                // Proses hutang hanya untuk Catatan Baru (bukan saat Edit Transaksi Lama)
-                if (!editingTxId && isDebt && debtId) {
-                    if (debtId === 'NEW') {
-                        // Membuat catatan hutang/piutang baru
-                        // Jika Pemasukan = Dapat Pinjaman (Hutang). Jika Pengeluaran = Kasih Pinjaman (Piutang).
-                        const isHutang = (currentTxType === 'income');
-                        const newDebtRef = await addDoc(collection(db, 'families', familyId, 'debts'), {
-                            nama: newDebtName,
-                if (currentTxType === 'expense') docData.category = document.getElementById('tx-category').value; 
-                }
-
-                // --- LOGIKA INTEGRASI APLIKASI HUTANG ---
-                const isDebt = document.getElementById('is-debt-tx').checked;
-                const debtId = document.getElementById('tx-debt-id').value;
 
                 // Proses hutang hanya untuk Catatan Baru (bukan saat Edit Transaksi Lama)
                 if (!editingTxId && isDebt && debtId) {
