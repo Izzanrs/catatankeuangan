@@ -669,11 +669,22 @@
             if (!select) return;
             const currentVal = select.value;
             select.innerHTML = '<option value="">-- Pilih Hutang/Piutang (Dari App Debt) --</option>';
+            
             activeDebts.forEach(d => {
-                const total = d.jumlah || 0;
-                const paid = d.terbayar || 0;
-                const progress = total > 0 ? Math.round((paid / total) * 100) : 0;
-                select.innerHTML += `<option value="${d.id}">${d.nama} (${progress}% Lunas)</option>`;
+                // Menyesuaikan persis dengan kolom (field) dari web Debt Tracker
+                const namaOrang = d.name || 'Tanpa Nama';
+                const deskripsi = d.description || '';
+                const totalHutang = d.amount || 0;
+                const totalTerbayar = d.paidAmount || 0;
+                const tipe = d.type === 'hutang' ? 'Hutang (Kita Pinjam)' : 'Piutang (Kita Minjamin)';
+                
+                const sisa = totalHutang - totalTerbayar;
+                const progress = totalHutang > 0 ? Math.round((totalTerbayar / totalHutang) * 100) : 0;
+                
+                // Hanya tampilkan yang belum lunas (Sisa > 0)
+                if (sisa > 0) {
+                    select.innerHTML += `<option value="${d.id}">[${tipe}] ${namaOrang} - ${deskripsi} (Sisa: Rp ${sisa.toLocaleString('id-ID')})</option>`;
+                }
             });
             select.value = currentVal || '';
         };
@@ -825,17 +836,36 @@
                 const isDebt = document.getElementById('is-debt-tx').checked;
                 const debtId = document.getElementById('tx-debt-id').value;
 
-                // Proses hutang hanya untuk Catatan Baru (bukan saat Edit Transaksi Lama)
+                // Proses hutang hanya untuk Catatan Baru
                 if (!editingTxId && isDebt && debtId) {
-                    // Mengupdate (mencicil/melunasi) catatan hutang yang sudah ada
                     docData.linkedDebtId = debtId;
                     const debtRef = doc(db, 'families', familyId, 'debts', debtId);
+                    const targetDebt = activeDebts.find(d => d.id === debtId);
                     
-                    // Sesuai UI: Pemasukan = Pinjam Lagi (jumlah hutang bertambah). Pengeluaran = Bayar Cicilan (terbayar bertambah).
-                    if (currentTxType === 'expense') {
-                        await updateDoc(debtRef, { terbayar: increment(amount) });
-                    } else if (currentTxType === 'income') {
-                        await updateDoc(debtRef, { jumlah: increment(amount) });
+                    if (targetDebt) {
+                        if (targetDebt.type === 'hutang') {
+                            // HUTANG: Kita meminjam uang dari orang
+                            if (currentTxType === 'expense') {
+                                // Kita bayar cicilan hutang
+                                const newPaid = (targetDebt.paidAmount || 0) + amount;
+                                const newPayments = targetDebt.payments ? [...targetDebt.payments, { amount: amount, date: Date.now() }] : [{ amount: amount, date: Date.now() }];
+                                await updateDoc(debtRef, { paidAmount: newPaid, isPaid: newPaid >= targetDebt.amount, payments: newPayments });
+                            } else if (currentTxType === 'income') {
+                                // Kita pinjam uang (nambah hutang baru)
+                                await updateDoc(debtRef, { amount: increment(amount) });
+                            }
+                        } else if (targetDebt.type === 'piutang') {
+                            // PIUTANG: Kita meminjamkan uang ke orang
+                            if (currentTxType === 'income') {
+                                // Orang bayar hutangnya ke kita
+                                const newPaid = (targetDebt.paidAmount || 0) + amount;
+                                const newPayments = targetDebt.payments ? [...targetDebt.payments, { amount: amount, date: Date.now() }] : [{ amount: amount, date: Date.now() }];
+                                await updateDoc(debtRef, { paidAmount: newPaid, isPaid: newPaid >= targetDebt.amount, payments: newPayments });
+                            } else if (currentTxType === 'expense') {
+                                // Kita minjamin uang lagi (nambah piutang)
+                                await updateDoc(debtRef, { amount: increment(amount) });
+                            }
+                        }
                     }
                 }
                 // ----------------------------------------
