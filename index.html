@@ -612,6 +612,8 @@
         };
 
         let app, auth, db, currentUser = null, unsubscribe = null, unsubscribeMembers = null, unsubscribeDebts = null, unsubscribeGoals = null;
+        let familyAdminUid = null;
+        let currentFamilyMembers = [];
         let familyId = localStorage.getItem('familyId');
         let currentTxType = 'expense';
         let allWalletsData = {}; 
@@ -1054,14 +1056,9 @@
             const container = document.getElementById('wallet-selector-list');
             container.innerHTML = '';
             
-            // Sort wallet berdasarkan abjad (atau saldo)
+            // Sort wallet berdasarkan abjad
             const sortedWallets = Object.keys(allWalletsData).sort((a, b) => a.localeCompare(b));
             const currentValue = document.getElementById(currentWalletSelectTarget).value;
-            
-            // Tambahkan "Tunai" / "Cash" default jika kosong
-            if(!sortedWallets.includes("Tunai") && !sortedWallets.includes("Cash")) {
-                 sortedWallets.unshift("Tunai"); 
-            }
 
             if(sortedWallets.length === 0) {
                 container.innerHTML = `<p class="text-center text-[13px] font-medium text-slate-400 py-6">Belum ada dompet. Silakan tambah baru di bawah.</p>`;
@@ -1289,6 +1286,17 @@
                 const badgeText = isAnon ? 'Anonim' : 'Google';
                 const youTag = (currentUser && m.uid === currentUser.uid) ? '<span class="text-[10px] font-bold text-slate-400 ml-1">(Anda)</span>' : '';
                 const nameStr = m.displayName ? m.displayName : label;
+                
+                const isAdmin = (currentUser && currentUser.uid === familyAdminUid);
+                const isSelf = (currentUser && m.uid === currentUser.uid);
+                
+                let removeBtn = '';
+                if (isAdmin && !isSelf) {
+                    removeBtn = `<button onclick="window.removeMember('${m.uid}')" class="ml-2 p-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 text-red-500 rounded-lg active:scale-95 transition-all" title="Keluarkan Anggota">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>`;
+                }
+
                 return `
                 <div class="flex items-center justify-between bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3.5 shadow-sm transition-colors">
                     <div class="flex items-center gap-3">
@@ -1298,7 +1306,10 @@
                             <p class="text-[11px] text-slate-400 font-medium">${m.displayName ? label : ''}</p>
                         </div>
                     </div>
-                    <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badgeClass}">${badgeText}</span>
+                    <div class="flex items-center">
+                        <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badgeClass}">${badgeText}</span>
+                        ${removeBtn}
+                    </div>
                 </div>`;
             }).join('');
         }
@@ -1388,16 +1399,20 @@
                 if(docSnap.exists()) {
                     const data = docSnap.data();
                     const name = data.familyName || "Keluarga";
+                    familyAdminUid = data.createdBy; // Menandai siapa adminnya
                     familyBudgets = data.budgets || {}; // Mengambil data batas budget
                     document.getElementById('header-family-name').innerHTML = `${name} 👋`;
                     document.getElementById('input-family-name').value = name;
                     renderData(); // Panggil render lagi agar budget ter-update
+                    if(currentFamilyMembers.length > 0) renderFamilyMembers(currentFamilyMembers); // Re-render jika status admin terlambat termuat
                 }
             });
 
             if (unsubscribeMembers) unsubscribeMembers();
             unsubscribeMembers = onSnapshot(collection(db, 'families', familyId, 'members'), (snapshot) => {
-                const members = []; snapshot.forEach(d => members.push(d.data())); renderFamilyMembers(members);
+                currentFamilyMembers = []; 
+                snapshot.forEach(d => currentFamilyMembers.push(d.data())); 
+                renderFamilyMembers(currentFamilyMembers);
             });
 
             const q = query(collection(db, 'families', familyId, 'transactions'), orderBy('timestamp', 'desc'));
@@ -1451,6 +1466,20 @@
 
         window.copyFamilyId = () => { navigator.clipboard.writeText(familyId); showToast("ID disalin!"); };
         
+        window.removeMember = async (memberUid) => {
+            if (!confirm("Yakin ingin mengeluarkan anggota ini? Mereka tidak akan bisa melihat atau mengubah data keuangan lagi.")) return;
+            try {
+                // 1. Hapus referensi dari subkoleksi members
+                await deleteDoc(doc(db, 'families', familyId, 'members', memberUid));
+                // 2. Cabut hak akses dari dokumen users mereka agar ditendang saat reload
+                await updateDoc(doc(db, 'users', memberUid), { familyId: null });
+                showToast("Anggota berhasil dikeluarkan.");
+            } catch (error) {
+                console.error(error);
+                showToast("Gagal mengeluarkan anggota.", "error");
+            }
+        };
+
         window.logout = async () => {
             if (currentUser && currentUser.isAnonymous) {
                 const proceed = confirm("PERINGATAN: Akun Anda masih Anonim (belum ditautkan ke Google).\n\nJika Sign Out sekarang, SEMUA data keuangan di perangkat ini berisiko HILANG dan tidak bisa dipulihkan.\n\nTekan OK untuk tetap lanjut Sign Out.");
