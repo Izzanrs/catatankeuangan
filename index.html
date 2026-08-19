@@ -10,7 +10,6 @@
     
     <title>Pencatatan Keuangan Keluarga</title>
 
-    <!-- Memanggil Favicon & Logo -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -21,6 +20,26 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- TAMBAHAN: Script OneSignal -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        const myAppId = "630d372d-61aa-4986-8c23-8f334f178dbd"; // Ganti dengan App ID dari OneSignal
+        
+        // Mencegah error jika App ID belum diganti
+        if (myAppId !== "630d372d-61aa-4986-8c23-8f334f178dbd") {
+            try {
+                await OneSignal.init({ appId: myAppId });
+            } catch (error) {
+                console.error("OneSignal Init Error:", error);
+            }
+        } else {
+            console.warn("OneSignal App ID belum diisi. Fitur notifikasi tidak akan berjalan di preview ini.");
+        }
+      });
+    </script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -64,7 +83,6 @@
 
     <main class="flex-1 overflow-y-auto hide-scrollbar pb-safe">
         
-        <!-- HEADER & BALANCE -->
         <div class="bg-white dark:bg-slate-900 px-6 pt-10 pb-8 rounded-b-[40px] shadow-sm relative z-10 transition-colors">
             <div class="flex justify-between items-center mb-8">
                 <div>
@@ -181,7 +199,7 @@
     <nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 z-40 pb-[env(safe-area-inset-bottom)] transition-colors">
         <div class="flex justify-around items-center h-20 px-2">
             <button class="flex flex-col items-center justify-center w-16 text-slate-900 dark:text-white">
-                <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 00.707-1.707l-9-9a.999.999 0 00-1.414 0l-9 9A1 1 0 003 13zm9-8.586l6 6V15l.001 5H6v-9.586l6-6z"/></svg>
+                <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h1v7c0 1.103.897 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 00.707-1.707l-9-9a.999.999 0 00-1.414 0l-9 9A1 1 0 003 13zm9-8.586l6 6V15l.001 5H6v-9.586l6-6z"/></svg>
                 <span class="text-[10px] font-bold">Home</span>
             </button>
             <button onclick="window.showModal('chart-modal')" class="flex flex-col items-center justify-center w-16 text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
@@ -311,8 +329,6 @@
                         </div>
                         <canvas id="receipt-canvas" style="display:none;"></canvas>
                     </div>
-
-                    <!-- Dihapus: datalist wallets-list karena sudah tidak dipakai -->
 
                     <div class="pt-6">
                         <button type="submit" id="btn-submit" class="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold py-4 rounded-[20px] active:scale-95 transition-transform text-[15px]">
@@ -506,6 +522,25 @@
                 </div>
             </div>
 
+            <!-- FITUR BARU: PENGATURAN NOTIFIKASI -->
+            <div class="mb-6">
+                <h3 class="text-[13px] font-bold text-slate-900 dark:text-white mb-2">Pengaturan</h3>
+                <button onclick="window.enableNotifications()" class="w-full bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3.5 flex justify-between items-center shadow-sm active:scale-95 transition-all">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-[13px] font-bold text-slate-900 dark:text-white leading-tight">Pengingat Malam (20:00)</p>
+                            <p id="notif-status-text" class="text-[11px] text-slate-400 font-medium">Ketuk untuk aktifkan</p>
+                        </div>
+                    </div>
+                    <div id="notif-toggle-bg" class="w-10 h-6 bg-slate-200 dark:bg-slate-700 rounded-full relative transition-colors shrink-0">
+                        <div id="notif-toggle-dot" class="w-4 h-4 bg-white rounded-full absolute top-1 left-1 transition-transform"></div>
+                    </div>
+                </button>
+            </div>
+
             <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
                 <button onclick="window.logout()" class="w-full py-3.5 bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 font-bold rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform text-[13px]">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -616,6 +651,7 @@
         let currentFamilyMembers = [];
         let familyId = localStorage.getItem('familyId');
         let currentTxType = 'expense';
+
         let allWalletsData = {}; 
         let rawTransactions = [];
         let activeDebts = [];
@@ -626,12 +662,8 @@
         let actualTotalBalanceStr = "Rp 0";
         let editingTxId = null; 
         
-        // Variabel untuk modal dompet
         let currentWalletSelectTarget = '';
-
-        // Kategori Default untuk Budgeting
         const CATEGORIES = ["Makanan & Minuman", "Transportasi", "Tagihan & Cicilan", "Belanja", "Hiburan & Hobi", "Kesehatan", "Lainnya"];
-
         const provider = new GoogleAuthProvider();
         const today = new Date();
         document.getElementById('month-filter').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
@@ -639,7 +671,11 @@
         window.showModal = (id) => { const el = document.getElementById(id); el.classList.remove('invisible'); el.classList.add('active'); };
         window.hideModal = (id) => { const el = document.getElementById(id); el.classList.remove('active'); setTimeout(() => el.classList.add('invisible'), 300); };
         window.viewReceipt = (b64) => { document.getElementById('receipt-img-view').src = b64; window.showModal('receipt-modal'); };
-        window.openFamilyModal = () => { window.updateAccountStatusUI(); window.showModal('family-modal'); };
+        window.openFamilyModal = () => { 
+            window.updateAccountStatusUI(); 
+            if(window.checkNotifStatusUI) window.checkNotifStatusUI();
+            window.showModal('family-modal'); 
+        };
         
         const showToast = (msg, type = 'success') => {
             const toast = document.getElementById('toast-container');
@@ -724,7 +760,6 @@
             });
         }
 
-        // FITUR BARU: RENDER PROGRESS BUDGET
         function renderBudgetsUI(monthlyCategoryData) {
             const container = document.getElementById('budgets-container');
             container.innerHTML = '';
@@ -1089,6 +1124,7 @@
                 `;
             });
         }
+
         function renderData() {
             const selectedMonthStr = document.getElementById('month-filter').value;
             let html = ''; let tIncome = 0; let tExpense = 0; let monthlyCategoryData = {};
@@ -1374,6 +1410,57 @@
             }
         };
 
+        // --- FITUR NOTIFIKASI PENGINGAT (ONESIGNAL) ---
+        window.enableNotifications = () => {
+            if (!window.OneSignalDeferred) return showToast("OneSignal gagal dimuat", "error");
+            
+            document.getElementById('notif-status-text').textContent = "Menunggu izin...";
+            window.OneSignalDeferred.push(async function(OneSignal) {
+                try {
+                    await OneSignal.Slidedown.promptPush();
+                } catch(e) {
+                    showToast("Gagal meminta izin notifikasi", "error");
+                    document.getElementById('notif-status-text').textContent = "Ketuk untuk aktifkan";
+                }
+            });
+        };
+
+        window.checkNotifStatusUI = () => {
+            if (!window.OneSignalDeferred) return;
+            
+            window.OneSignalDeferred.push(function(OneSignal) {
+                // Set UI awal saat modal dibuka
+                const isSubscribed = OneSignal.User.PushSubscription.optedIn;
+                if(isSubscribed) {
+                    document.getElementById('notif-toggle-bg').classList.add('bg-emerald-500');
+                    document.getElementById('notif-toggle-bg').classList.remove('bg-slate-200', 'dark:bg-slate-700');
+                    document.getElementById('notif-toggle-dot').classList.add('translate-x-4');
+                    document.getElementById('notif-status-text').textContent = "Aktif";
+                } else {
+                    document.getElementById('notif-toggle-bg').classList.remove('bg-emerald-500');
+                    document.getElementById('notif-toggle-bg').classList.add('bg-slate-200', 'dark:bg-slate-700');
+                    document.getElementById('notif-toggle-dot').classList.remove('translate-x-4');
+                    document.getElementById('notif-status-text').textContent = "Ketuk untuk aktifkan";
+                }
+
+                // Dengarkan perubahan jika user mengizinkan/menolak di popup browser
+                OneSignal.User.PushSubscription.addEventListener("change", (subscription) => {
+                    if (subscription.current.optedIn) {
+                        document.getElementById('notif-toggle-bg').classList.add('bg-emerald-500');
+                        document.getElementById('notif-toggle-bg').classList.remove('bg-slate-200', 'dark:bg-slate-700');
+                        document.getElementById('notif-toggle-dot').classList.add('translate-x-4');
+                        document.getElementById('notif-status-text').textContent = "Aktif";
+                        showToast("Pengingat Malam diaktifkan!");
+                    } else {
+                        document.getElementById('notif-toggle-bg').classList.remove('bg-emerald-500');
+                        document.getElementById('notif-toggle-bg').classList.add('bg-slate-200', 'dark:bg-slate-700');
+                        document.getElementById('notif-toggle-dot').classList.remove('translate-x-4');
+                        document.getElementById('notif-status-text').textContent = "Ketuk untuk aktifkan";
+                    }
+                });
+            });
+        };
+
         function loadFamilyData() {
             document.getElementById('family-id-display').textContent = familyId;
             document.getElementById('modal-family-id').textContent = familyId;
@@ -1424,11 +1511,18 @@
 
         async function initApp() {
             try {
-                app = initializeApp(firebaseConfig); auth = getAuth(app); db = getFirestore(app);
+                app = initializeApp(firebaseConfig); 
+                auth = getAuth(app); 
+                db = getFirestore(app);
 
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         currentUser = user; await checkUserFamilyStatus(user);
+                        
+                        // Binding identitas user ke OneSignal agar bisa ditarget spesifik jika mau (Opsional)
+                        window.OneSignalDeferred.push(function(OneSignal) {
+                            OneSignal.login(user.uid);
+                        });
                     } else {
                         currentUser = null;
                         window.showModal('setup-modal');
