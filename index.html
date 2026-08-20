@@ -670,6 +670,24 @@
         const today = new Date();
         document.getElementById('month-filter').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 
+        // FITUR BARU: Deteksi otomatis logo dompet berdasarkan nama
+        window.getWalletIcon = (name) => {
+            const n = name.toLowerCase();
+            if (n.includes('mandiri')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_of_Bank_Mandiri.svg" class="w-full h-full object-contain p-1" alt="Mandiri" />`;
+            if (n.includes('bca')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" class="w-full h-full object-contain p-1" alt="BCA" />`;
+            if (n.includes('gopay')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" class="w-full h-full object-contain p-1" alt="GoPay" />`;
+            if (n.includes('ovo')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/OVO_logo.svg" class="w-full h-full object-contain p-1" alt="OVO" />`;
+            if (n.includes('dana')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" class="w-full h-full object-contain p-1" alt="DANA" />`;
+            if (n.includes('shopee') || n.includes('spay')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Shopee.svg" class="w-full h-full object-contain p-1" alt="ShopeePay" />`;
+            if (n.includes('bri')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/BRI_2020.svg" class="w-full h-full object-contain p-1" alt="BRI" />`;
+            if (n.includes('bni')) return `<img src="https://upload.wikimedia.org/wikipedia/id/5/55/BNI_logo.svg" class="w-full h-full object-contain p-1" alt="BNI" />`;
+            if (n.includes('jago')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Bank_Jago_logo.svg" class="w-full h-full object-contain p-1" alt="Jago" />`;
+            if (n.includes('tunai') || n.includes('cash')) return `<svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>`;
+            
+            // Default jika tidak dikenali, tampilkan inisial huruf
+            return `<span class="font-black tracking-widest text-xs text-slate-600 dark:text-slate-300 m-auto">${name.substring(0,2).toUpperCase()}</span>`;
+        };
+
         window.showModal = (id) => { const el = document.getElementById(id); el.classList.remove('invisible'); el.classList.add('active'); };
         window.hideModal = (id) => { const el = document.getElementById(id); el.classList.remove('active'); setTimeout(() => el.classList.add('invisible'), 300); };
         window.viewReceipt = (b64) => { document.getElementById('receipt-img-view').src = b64; window.showModal('receipt-modal'); };
@@ -1105,17 +1123,17 @@
             sortedWallets.forEach(walletName => {
                 const balance = allWalletsData[walletName] || 0;
                 const isSelected = currentValue === walletName;
-                const initials = walletName.substring(0, 2).toUpperCase();
+                const iconHtml = window.getWalletIcon(walletName);
                 
                 // Styling saat terpilih mirip dengan desain di gambar
                 const bgClass = isSelected ? 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-600 shadow-sm' : 'bg-white dark:bg-slate-950 border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-900';
                 const checkIcon = isSelected ? `<svg class="w-6 h-6 text-slate-700 dark:text-slate-300 ml-auto" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1.177-7.86l-2.765-2.764a.996.996 0 10-1.41 1.41l3.47 3.47a.996.996 0 001.41 0l6.19-6.19a.996.996 0 10-1.41-1.41l-5.485 5.484z" clip-rule="evenodd"/></svg>` : '';
-                const iconBgClass = isSelected ? 'bg-slate-300/50 dark:bg-slate-700 text-slate-800 dark:text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400';
+                const iconBgClass = isSelected ? 'bg-white dark:bg-slate-700 shadow-sm' : 'bg-slate-100 dark:bg-slate-800';
 
                 container.innerHTML += `
                     <button type="button" onclick="window.selectWallet('${walletName}')" class="w-full flex items-center gap-4 p-4 rounded-[20px] border transition-all text-left ${bgClass}">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center font-black text-xs shrink-0 ${iconBgClass}">
-                            ${initials}
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden shrink-0 ${iconBgClass}">
+                            ${iconHtml}
                         </div>
                         <div class="flex-1 overflow-hidden">
                             <p class="font-bold text-[15px] text-slate-900 dark:text-white truncate">${walletName}</p>
@@ -1156,6 +1174,20 @@
                     const initials = data.desc.substring(0, 2).toUpperCase();
                     const receiptBtn = data.receiptBase64 ? `<button onclick="window.viewReceipt('${data.receiptBase64}')" class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded mt-1 font-bold">Struk</button>` : '';
                     
+                    // FITUR BARU: Role-Based Access Control (RBAC) pada transaksi
+                    const canEditDelete = currentUser && (currentUser.uid === familyAdminUid || data.userId === currentUser.uid);
+                    let actionButtons = '';
+                    if (canEditDelete) {
+                        actionButtons = `
+                        <div class="flex gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="window.editTransaction('${data.id}')" class="text-[10px] text-blue-500 font-bold bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded">Edit</button>
+                            <button onclick="window.deleteTx('${data.id}')" class="text-[10px] text-red-500 font-bold bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded">Hapus</button>
+                        </div>`;
+                    } else {
+                        const creatorName = (currentFamilyMembers.find(m => m.uid === data.userId) || {}).displayName || 'Anggota lain';
+                        actionButtons = `<div class="mt-2 text-[9px] text-slate-400 font-bold opacity-0 group-hover:opacity-100 transition-opacity">Ditambahkan oleh ${creatorName}</div>`;
+                    }
+                    
                     html += `
                     <div class="flex justify-between items-center bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm relative group transition-colors">
                         <div class="flex items-center gap-4">
@@ -1169,10 +1201,7 @@
                         <div class="text-right flex flex-col items-end">
                             <p class="font-black ${amountColor} text-[15px]">${sign}${formatRp(data.amount)}</p>
                             ${receiptBtn}
-                            <div class="flex gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onclick="window.editTransaction('${data.id}')" class="text-[10px] text-blue-500 font-bold bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded">Edit</button>
-                                <button onclick="window.deleteTx('${data.id}')" class="text-[10px] text-red-500 font-bold bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded">Hapus</button>
-                            </div>
+                            ${actionButtons}
                         </div>
                     </div>`;
                 }
@@ -1201,10 +1230,17 @@
 
             sorted.forEach((name, index) => {
                 const colorClass = index % 2 === 0 ? 'cc-card' : 'cc-card green';
+                const iconHtml = window.getWalletIcon(name);
+
                 container.innerHTML += `
                 <div class="min-w-[260px] ${colorClass} rounded-[24px] p-6 text-white shrink-0 shadow-lg shadow-slate-200 dark:shadow-none">
                     <div class="flex justify-between items-start mb-6">
-                        <span class="font-bold text-[15px] tracking-wide">${name}</span>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center overflow-hidden shrink-0 backdrop-blur-sm">
+                                ${iconHtml}
+                            </div>
+                            <span class="font-bold text-[15px] tracking-wide">${name}</span>
+                        </div>
                         <svg class="w-8 h-8 opacity-70" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4V4zm2 2v2h4V6H6zm6 0v2h4V6h-4zm6 0v2h2V6h-2zM6 10v2h12v-2H6zm0 4v2h4v-2H6zm6 0v2h4v-2h-4zm6 0v2h2v-2h-2zM6 18h12v-2H6v2z"/></svg>
                     </div>
                     <p class="text-[11px] text-white/60 font-semibold mb-1 uppercase tracking-widest">Total Balance</p>
@@ -1217,10 +1253,13 @@
             const container = document.getElementById('wallet-list-container-modal'); container.innerHTML = '';
             const sorted = Object.keys(allWalletsData).sort((a, b) => allWalletsData[b] - allWalletsData[a]);
             sorted.forEach(name => {
+                const iconHtml = window.getWalletIcon(name);
                 container.innerHTML += `
                     <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 rounded-[20px] flex justify-between items-center shadow-sm transition-colors">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center font-black tracking-widest text-sm">${name.substring(0,2).toUpperCase()}</div>
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center overflow-hidden shrink-0">
+                                ${iconHtml}
+                            </div>
                             <p class="font-bold text-slate-900 dark:text-white text-[15px]">${name}</p>
                         </div>
                         <p class="font-black text-slate-900 dark:text-white text-[17px]">${formatRp(allWalletsData[name])}</p>
@@ -1325,11 +1364,16 @@
                 const youTag = (currentUser && m.uid === currentUser.uid) ? '<span class="text-[10px] font-bold text-slate-400 ml-1">(Anda)</span>' : '';
                 const nameStr = m.displayName ? m.displayName : label;
                 
-                const isAdmin = (currentUser && currentUser.uid === familyAdminUid);
+                // FITUR BARU: Role Badges
+                const isMemberAdmin = (m.uid === familyAdminUid);
+                const roleBadge = isMemberAdmin ? 'Admin' : 'Anggota';
+                const roleColor = isMemberAdmin ? 'text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-400' : 'text-slate-500 bg-slate-100 dark:bg-slate-800 dark:text-slate-400';
+
+                const isViewerAdmin = (currentUser && currentUser.uid === familyAdminUid);
                 const isSelf = (currentUser && m.uid === currentUser.uid);
                 
                 let removeBtn = '';
-                if (isAdmin && !isSelf) {
+                if (isViewerAdmin && !isSelf) {
                     removeBtn = `<button onclick="window.removeMember('${m.uid}')" class="ml-2 p-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 text-red-500 rounded-lg active:scale-95 transition-all" title="Keluarkan Anggota">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </button>`;
@@ -1342,10 +1386,11 @@
                         <div class="text-left">
                             <p class="text-[13px] font-bold text-slate-900 dark:text-white leading-tight">${nameStr}${youTag}</p>
                             <p class="text-[11px] text-slate-400 font-medium">${m.displayName ? label : ''}</p>
+                            <span class="text-[9px] font-black px-2 py-0.5 rounded-full ${roleColor} mt-1 inline-block">${roleBadge}</span>
                         </div>
                     </div>
                     <div class="flex items-center">
-                        <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badgeClass}">${badgeText}</span>
+                        <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badgeClass} hidden sm:inline-block">${badgeText}</span>
                         ${removeBtn}
                     </div>
                 </div>`;
@@ -1504,10 +1549,32 @@
                 renderFamilyMembers(currentFamilyMembers);
             });
 
+            // FITUR BARU: Notifikasi Realtime di dalam Aplikasi (In-App)
+            let initialLoadTx = true;
             const q = query(collection(db, 'families', familyId, 'transactions'), orderBy('timestamp', 'desc'));
             if(unsubscribe) unsubscribe();
             unsubscribe = onSnapshot(q, (snapshot) => {
-                rawTransactions = []; snapshot.forEach(d => rawTransactions.push({ id: d.id, ...d.data() })); renderData();
+                
+                // Cek perubahan apa saja yang masuk, untuk memicu notifikasi toast
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added" && !initialLoadTx) {
+                        const data = change.doc.data();
+                        // Hanya beri notifikasi jika yang menambah transaksi BUKAN diri kita sendiri
+                        if (currentUser && data.userId !== currentUser.uid) {
+                            const member = currentFamilyMembers.find(m => m.uid === data.userId);
+                            const memberName = member ? (member.displayName || 'Anggota keluarga') : 'Seseorang';
+                            const amountStr = formatRp(data.amount);
+                            
+                            if (data.type === 'expense') showToast(`🔔 ${memberName} mencatat pengeluaran: ${data.desc} (${amountStr})`);
+                            else if (data.type === 'income') showToast(`🔔 ${memberName} mencatat pemasukan: ${data.desc} (${amountStr})`);
+                        }
+                    }
+                });
+
+                rawTransactions = []; 
+                snapshot.forEach(d => rawTransactions.push({ id: d.id, ...d.data() })); 
+                renderData();
+                initialLoadTx = false;
             });
         }
 
