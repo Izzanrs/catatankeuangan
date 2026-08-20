@@ -692,10 +692,22 @@
                 return `<svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>`;
             }
 
-            // PERUBAHAN: Sekarang memanggil gambar dari folder lokal "logos" yang sejajar dengan index.html
-            const localBaseUrl = "/logos/"; 
+            // SMART MATCHING: Cari kata kunci bank/ewallet di dalam nama dompet
+            let iconFileName = cleanName;
+            // Daftar kata kunci bank/ewallet yang Anda miliki logonya
+            const knownBanks = ['mandiri', 'bca', 'bsi', 'bri', 'bni', 'seabank', 'jago', 'shopeepay', 'gopay', 'dana', 'ovo', 'linkaja', 'jenius'];
             
-            const imgUrl = `${localBaseUrl}${cleanName}.png`;
+            for (let bank of knownBanks) {
+                if (cleanName.includes(bank)) {
+                    iconFileName = bank; // Jika ketemu kata kunci, gunakan kata kunci itu saja (misal: "bsi")
+                    break;
+                }
+            }
+
+            // PERBAIKAN: Gunakan "./logos/" (titik dan garis miring) agar selalu terbaca di folder yang sama
+            const localBaseUrl = "./logos/"; 
+            
+            const imgUrl = `${localBaseUrl}${iconFileName}.png`;
             const fallbackInitials = name.substring(0, 2).toUpperCase();
             
             // Jika gambar ditemukan akan ditampilkan. Jika error (404 Not Found), otomatis diganti dengan teks inisial 2 huruf
