@@ -499,6 +499,15 @@
                 </button>
             </div>
 
+            <!-- FITUR BARU: UBAH NAMA PANGGILAN PRIBADI -->
+            <div class="mb-6">
+                <label class="text-[12px] font-bold text-slate-500 dark:text-slate-400 mb-1.5 block">Nama Anda (Misal: Ayah, Ibu, Suami)</label>
+                <div class="flex gap-2">
+                    <input type="text" id="input-my-name" class="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-blue-500 font-bold text-sm text-slate-900 dark:text-white transition-colors" placeholder="Ketik nama Anda...">
+                    <button onclick="window.saveMyName()" class="px-5 bg-blue-500 text-white font-bold rounded-xl whitespace-nowrap active:scale-95 text-sm transition-transform shadow-lg shadow-blue-500/30">Ubah</button>
+                </div>
+            </div>
+
             <div class="mb-6">
                 <label class="text-[12px] font-bold text-slate-500 dark:text-slate-400 mb-1.5 block">Nama Profil / Keluarga</label>
                 <div class="flex gap-2">
@@ -670,22 +679,24 @@
         const today = new Date();
         document.getElementById('month-filter').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 
-        // FITUR BARU: Deteksi otomatis logo dompet berdasarkan nama
+        // FITUR BARU: Deteksi otomatis logo dompet berdasarkan nama dari GitHub
         window.getWalletIcon = (name) => {
-            const n = name.toLowerCase();
-            if (n.includes('mandiri')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_of_Bank_Mandiri.svg" class="w-full h-full object-contain p-1" alt="Mandiri" />`;
-            if (n.includes('bca')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" class="w-full h-full object-contain p-1" alt="BCA" />`;
-            if (n.includes('gopay')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" class="w-full h-full object-contain p-1" alt="GoPay" />`;
-            if (n.includes('ovo')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/OVO_logo.svg" class="w-full h-full object-contain p-1" alt="OVO" />`;
-            if (n.includes('dana')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" class="w-full h-full object-contain p-1" alt="DANA" />`;
-            if (n.includes('shopee') || n.includes('spay')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Shopee.svg" class="w-full h-full object-contain p-1" alt="ShopeePay" />`;
-            if (n.includes('bri')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/BRI_2020.svg" class="w-full h-full object-contain p-1" alt="BRI" />`;
-            if (n.includes('bni')) return `<img src="https://upload.wikimedia.org/wikipedia/id/5/55/BNI_logo.svg" class="w-full h-full object-contain p-1" alt="BNI" />`;
-            if (n.includes('jago')) return `<img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Bank_Jago_logo.svg" class="w-full h-full object-contain p-1" alt="Jago" />`;
-            if (n.includes('tunai') || n.includes('cash')) return `<svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>`;
+            // Membersihkan nama dari spasi dan simbol: "BCA" -> "bca", "Shopee Pay" -> "shopeepay"
+            const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
             
-            // Default jika tidak dikenali, tampilkan inisial huruf
-            return `<span class="font-black tracking-widest text-xs text-slate-600 dark:text-slate-300 m-auto">${name.substring(0,2).toUpperCase()}</span>`;
+            // Pengecualian khusus untuk Tunai/Cash agar tetap pakai icon vector bawaan
+            if (cleanName.includes('tunai') || cleanName.includes('cash')) {
+                return `<svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>`;
+            }
+
+            // PERUBAHAN: Sekarang memanggil gambar dari folder lokal "logos" yang sejajar dengan index.html
+            const localBaseUrl = "/logos/"; 
+            
+            const imgUrl = `${localBaseUrl}${cleanName}.png`;
+            const fallbackInitials = name.substring(0, 2).toUpperCase();
+            
+            // Jika gambar ditemukan akan ditampilkan. Jika error (404 Not Found), otomatis diganti dengan teks inisial 2 huruf
+            return `<img src="${imgUrl}" class="w-full h-full object-contain p-1" alt="${name}" onerror="this.onerror=null; this.outerHTML='<span class=&quot;font-black tracking-widest text-xs text-slate-600 dark:text-slate-300 m-auto&quot;>${fallbackInitials}</span>';" />`;
         };
 
         window.showModal = (id) => { const el = document.getElementById(id); el.classList.remove('invisible'); el.classList.add('active'); };
@@ -1428,6 +1439,16 @@
             try { await updateDoc(doc(db, 'families', familyId), { familyName: newName }); showToast("Nama Profil Berhasil Disimpan!"); } catch(e) { showToast("Gagal menyimpan nama", "error"); }
         };
 
+        // FITUR BARU: Fungsi untuk mengubah nama panggilan pribadi (Ayah, Ibu, dll)
+        window.saveMyName = async () => {
+            const newName = document.getElementById('input-my-name').value.trim();
+            if(!newName) return showToast("Nama panggilan tidak boleh kosong!", "error");
+            try { 
+                await setDoc(doc(db, 'families', familyId, 'members', currentUser.uid), { displayName: newName }, { merge: true }); 
+                showToast("Nama panggilan berhasil diubah!"); 
+            } catch(e) { showToast("Gagal menyimpan nama", "error"); }
+        };
+
         async function checkUserFamilyStatus(user) {
             try {
                 const userDocRef = doc(db, 'users', user.uid);
@@ -1546,11 +1567,14 @@
             unsubscribeMembers = onSnapshot(collection(db, 'families', familyId, 'members'), (snapshot) => {
                 currentFamilyMembers = []; 
                 snapshot.forEach(d => currentFamilyMembers.push(d.data())); 
+                
+                // Set nilai input nama panggilan pribadi sesuai data terbaru di database
+                const me = currentFamilyMembers.find(m => currentUser && m.uid === currentUser.uid);
+                if (me && me.displayName) document.getElementById('input-my-name').value = me.displayName;
+                
                 renderFamilyMembers(currentFamilyMembers);
             });
 
-            // FITUR BARU: Notifikasi Realtime di dalam Aplikasi (In-App)
-            let initialLoadTx = true;
             const q = query(collection(db, 'families', familyId, 'transactions'), orderBy('timestamp', 'desc'));
             if(unsubscribe) unsubscribe();
             unsubscribe = onSnapshot(q, (snapshot) => {
