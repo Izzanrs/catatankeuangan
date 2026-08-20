@@ -27,15 +27,17 @@
       OneSignalDeferred.push(async function(OneSignal) {
         const myAppId = "630d372d-61aa-4986-8c23-8f334f178dbd"; // Ganti dengan App ID dari OneSignal
         
-        // Mencegah error jika App ID belum diganti
-        if (myAppId !== "630d372d-61aa-4986-8c23-8f334f178dbd") {
-            try {
-                await OneSignal.init({ appId: myAppId });
-            } catch (error) {
-                console.error("OneSignal Init Error:", error);
-            }
-        } else {
-            console.warn("OneSignal App ID belum diisi. Fitur notifikasi tidak akan berjalan di preview ini.");
+        const currentDomain = window.location.hostname;
+        // Hanya jalankan OneSignal di domain production atau localhost
+        if (currentDomain !== "catatankeuangan.pages.dev" && currentDomain !== "localhost" && currentDomain !== "127.0.0.1") {
+            console.warn("OneSignal dilewati: Berjalan di mode preview (" + currentDomain + "). Push Notifikasi hanya akan aktif di catatankeuangan.pages.dev.");
+            return; // Hentikan inisialisasi agar tidak error
+        }
+
+        try {
+            await OneSignal.init({ appId: myAppId });
+        } catch (error) {
+            console.warn("OneSignal Init Warning:", error.message);
         }
       });
     </script>
