@@ -667,13 +667,12 @@
         let rawTransactions = [];
         let activeDebts = [];
         let goalsData = [];
-        let familyBudgets = {}; // Menyimpan data batas anggaran dari database
+        let familyBudgets = {}; 
         let myChart = null;
         let isBalanceVisible = true;
         let actualTotalBalanceStr = "Rp 0";
         let editingTxId = null; 
         
-        // FITUR BARU: Perbaikan Bug Deklarasi Variabel
         let initialLoadTx = true; 
         
         let currentWalletSelectTarget = '';
@@ -682,36 +681,30 @@
         const today = new Date();
         document.getElementById('month-filter').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 
-        // FITUR BARU: Deteksi otomatis logo dompet berdasarkan nama dari GitHub
+        // MENGUBAH PATH GAMBAR KARENA FILE GAMBAR BERADA DI ROOT FOLDER GITHUB
         window.getWalletIcon = (name) => {
-            // Membersihkan nama dari spasi dan simbol: "BCA" -> "bca", "Shopee Pay" -> "shopeepay"
             const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
             
-            // Pengecualian khusus untuk Tunai/Cash agar tetap pakai icon vector bawaan
             if (cleanName.includes('tunai') || cleanName.includes('cash')) {
                 return `<svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400 m-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>`;
             }
 
-            // SMART MATCHING: Cari kata kunci bank/ewallet di dalam nama dompet
             let iconFileName = cleanName;
-            // Daftar kata kunci bank/ewallet yang Anda miliki logonya
             const knownBanks = ['mandiri', 'bca', 'bsi', 'bri', 'bni', 'seabank', 'jago', 'shopeepay', 'gopay', 'dana', 'ovo', 'linkaja', 'jenius'];
             
             for (let bank of knownBanks) {
                 if (cleanName.includes(bank)) {
-                    iconFileName = bank; // Jika ketemu kata kunci, gunakan kata kunci itu saja (misal: "bsi")
+                    iconFileName = bank; 
                     break;
                 }
             }
 
-            // PERBAIKAN: Gunakan "./logos/" (titik dan garis miring) agar selalu terbaca di folder yang sama
-            const localBaseUrl = "./logos/"; 
+            // PERBAIKAN: Menghapus "logos/" karena di repo GitHub gambar langsung di root
+            const imgUrl = `/${iconFileName}.png`;
             
-            const imgUrl = `${localBaseUrl}${iconFileName}.png`;
             const fallbackInitials = name.substring(0, 2).toUpperCase();
             
-            // Jika gambar ditemukan akan ditampilkan. Jika error (404 Not Found), otomatis diganti dengan teks inisial 2 huruf
-            return `<img src="${imgUrl}" class="w-full h-full object-contain p-1" alt="${name}" onerror="this.onerror=null; this.outerHTML='<span class=&quot;font-black tracking-widest text-xs text-slate-600 dark:text-slate-300 m-auto&quot;>${fallbackInitials}</span>';" />`;
+            return `<img src="${imgUrl}" class="w-full h-full object-contain p-1" alt="${name}" onerror="console.error('Gambar tidak ditemukan:', this.src); this.onerror=null; this.outerHTML='<span class=&quot;font-black tracking-widest text-xs text-slate-600 dark:text-slate-300 m-auto&quot;>${fallbackInitials}</span>';" />`;
         };
 
         window.showModal = (id) => { const el = document.getElementById(id); el.classList.remove('invisible'); el.classList.add('active'); };
