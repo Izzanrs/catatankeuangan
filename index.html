@@ -26,7 +26,6 @@
       OneSignalDeferred.push(async function(OneSignal) {
         const myAppId = "630d372d-61aa-4986-8c23-8f334f178dbd";
         
-        // Lewati inisialisasi jika dijalankan di mode preview lokal untuk menghindari error
         const isLocalhost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.hostname.includes('csb.app') || window.location.hostname.includes('webcontainer');
         
         if (!isLocalhost) {
@@ -68,38 +67,149 @@
         #toast-container { transition: transform 0.3s ease-in-out, opacity 0.3s; transform: translateY(-150%); opacity: 0; }
         #toast-container.show { transform: translateY(0); opacity: 1; }
         
-        /* PREMIUM CARD GRADIENTS */
-        /* Default / Tunai (Emerald Green with Light Green Accent) */
-        .cc-card.green, .cc-card.tunai { background: linear-gradient(135deg, #036952 30%, #059669 70%, #6EE7B7 130%); }
-        .cc-card.purple { background: linear-gradient(135deg, #4c1d95 30%, #6d28d9 70%, #c4b5fd 130%); }
+        /* SUPER PREMIUM CARD STYLES */
+        .cc-card {
+            position: relative;
+            overflow: hidden;
+            background-color: #ffffff; /* Default base */
+            z-index: 1;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Default fallback (Dark Theme) */
+        .cc-card.default {
+             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+             color: white;
+        }
+
+        /* --- MANDIRI PREMIUM --- */
+        .cc-card.mandiri {
+            /* Warna dominan terang (emas pudar/putih) ke arah navy gelap di kanan bawah */
+            background: 
+                /* Lengkungan emas bersinar di tengah */
+                radial-gradient(circle at 70% 80%, rgba(255, 193, 7, 0.8) 0%, transparent 40%),
+                /* Warna utama: Terang krem di kiri atas, bergeser ke Navy pekat di kanan bawah */
+                linear-gradient(135deg, #FFF9EB 0%, #FFEFC2 35%, #051A49 60%, #020B24 100%);
+            color: #051A49; /* Teks navy agar kontras di area terang */
+        }
+        /* Efek garis lengkung emas (ombak) */
+        .cc-card.mandiri::before {
+            content: '';
+            position: absolute;
+            bottom: -20%; right: -10%;
+            width: 120%; height: 120%;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 1px rgba(255, 200, 0, 0.4), inset 0 0 20px rgba(255, 200, 0, 0.2);
+            z-index: -1;
+            transform: rotate(-15deg);
+        }
+
+        /* --- BSI PREMIUM --- */
+        .cc-card.bsi {
+            /* Warna dominan terang ke arah hijau/cyan gelap di kanan bawah */
+            background: 
+                /* Lengkungan emas bersinar */
+                radial-gradient(circle at 80% 90%, rgba(255, 215, 0, 0.9) 0%, transparent 30%),
+                /* Warna utama: Putih kehijauan di kiri atas, bergeser ke cyan/tosca gelap */
+                linear-gradient(135deg, #E8F5F5 0%, #D0EBEA 30%, #008882 60%, #004D49 100%);
+            color: #00605B;
+        }
+        .cc-card.bsi::before {
+            content: '';
+            position: absolute;
+            bottom: -30%; right: -20%;
+            width: 140%; height: 140%;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 2px rgba(255, 215, 0, 0.5);
+            z-index: -1;
+            transform: rotate(-20deg);
+        }
+
+        /* --- SHOPEEPAY PREMIUM --- */
+        .cc-card.shopeepay {
+            /* Transisi lembut putih/krem ke oranye menyala */
+            background: 
+                /* Lengkungan oranye terang */
+                radial-gradient(ellipse at 80% 120%, #FF8A00 0%, transparent 60%),
+                linear-gradient(135deg, #FFF0E6 0%, #FFE0CC 40%, #FF5E00 70%, #E64A19 100%);
+            color: #D84315;
+        }
+        .cc-card.shopeepay::before {
+            content: '';
+            position: absolute;
+            bottom: -10%; right: -10%;
+            width: 150%; height: 100%;
+            border-radius: 50% 50% 0 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.6);
+            z-index: -1;
+            transform: rotate(-10deg);
+        }
+        .cc-card.shopeepay::after {
+            content: '';
+            position: absolute;
+            bottom: -20%; right: -5%;
+            width: 130%; height: 90%;
+            border-radius: 50% 50% 0 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: -1;
+            transform: rotate(-15deg);
+        }
+
+        /* --- BCA PREMIUM --- */
+        .cc-card.bca {
+            background: 
+                radial-gradient(circle at 75% 85%, rgba(0, 102, 255, 0.6) 0%, transparent 40%),
+                linear-gradient(135deg, #F0F5FF 0%, #DCE8FF 35%, #0044B3 65%, #00225A 100%);
+            color: #003380;
+        }
+        .cc-card.bca::before {
+            content: '';
+            position: absolute;
+            bottom: -25%; right: -15%;
+            width: 130%; height: 130%;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+            z-index: -1;
+        }
+
+        /* --- JAGO PREMIUM --- */
+        .cc-card.jago {
+            background: 
+                radial-gradient(circle at 80% 90%, rgba(255, 150, 0, 0.8) 0%, transparent 40%),
+                linear-gradient(135deg, #FFF5E6 0%, #FFEBCC 35%, #F78D1E 65%, #C26B0B 100%);
+            color: #B35F00;
+        }
+        .cc-card.jago::before {
+            content: '';
+            position: absolute;
+            bottom: -30%; right: -10%;
+            width: 140%; height: 140%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            z-index: -1;
+        }
+
+        /* Generic colors for others based on brand */
+        .cc-card.gopay { background: linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 40%, #00A5CF 70%, #007494 100%); color: #00607A; }
+        .cc-card.ovo { background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 40%, #4D2D8F 70%, #311A60 100%); color: #3A1B76; }
+        .cc-card.dana { background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 40%, #118EE0 70%, #0B5C94 100%); color: #094B7A; }
+        .cc-card.seabank { background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 40%, #FF7854 70%, #D8432A 100%); color: #C23016; }
+        .cc-card.tunai, .cc-card.green { background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 40%, #059669 70%, #035A3F 100%); color: #024B34; }
         
-        /* BCA (Deep Blue with Light Blue/Silver Accent) */
-        .cc-card.bca { background: linear-gradient(135deg, #004A99 30%, #0060C5 70%, #99C2FF 130%); }
-        
-        /* Mandiri (Navy Blue with Golden Yellow Accent) */
-        .cc-card.mandiri { background: linear-gradient(135deg, #0F204B 30%, #1A3673 70%, #F2A900 130%); }
-        
-        /* BSI (Teal/Cyan with Golden Yellow Accent) */
-        .cc-card.bsi { background: linear-gradient(135deg, #00858A 30%, #00B5BC 70%, #F8B400 130%); }
-        
-        /* ShopeePay (Vibrant Orange with Light Orange/White Accent) */
-        .cc-card.shopeepay { background: linear-gradient(135deg, #E65C00 30%, #FF6B00 70%, #FFD1A4 120%); }
-        
-        /* GoPay (Cyan/Blue with Light Cyan Accent) */
-        .cc-card.gopay { background: linear-gradient(135deg, #008CBF 30%, #00A5CF 70%, #99E6FF 130%); }
-        
-        /* OVO (Deep Purple with Light Purple Accent) */
-        .cc-card.ovo { background: linear-gradient(135deg, #3B236D 30%, #4D2D8F 70%, #B399FF 130%); }
-        
-        /* DANA (Solid Blue with Light Blue Accent) */
-        .cc-card.dana { background: linear-gradient(135deg, #0B64A4 30%, #118EE0 70%, #99D6FF 130%); }
-        
-        /* Jago (Deep Orange with Yellow Accent) */
-        .cc-card.jago { background: linear-gradient(135deg, #D96013 30%, #F78D1E 70%, #FFD457 130%); }
-        
-        /* SeaBank (Coral Red with Peach/White Accent) */
-        .cc-card.seabank { background: linear-gradient(135deg, #CC492B 30%, #FF7854 70%, #FFC9B9 130%); }
-        
+        /* Tambahkan wave default untuk sisa card */
+        .cc-card:not(.mandiri):not(.bsi):not(.shopeepay):not(.bca):not(.default)::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            right: -20%;
+            width: 150%;
+            height: 150%;
+            border-radius: 45%;
+            z-index: -1;
+            background: radial-gradient(circle at 100% 100%, rgba(255,255,255,0.15) 0%, transparent 60%);
+        }
+
         .pb-safe { padding-bottom: calc(80px + var(--safe-bottom)); }
     </style>
 </head>
@@ -107,6 +217,7 @@
 
     <main class="flex-1 overflow-y-auto hide-scrollbar pb-safe">
         
+        <!-- Header -->
         <div class="bg-white dark:bg-slate-900 px-6 pt-10 pb-8 rounded-b-[40px] shadow-sm relative z-10 transition-colors">
             <div class="flex justify-between items-center mb-8">
                 <div>
@@ -697,7 +808,7 @@
         let isBalanceVisible = true;
         let actualTotalBalanceStr = "Rp 0";
         let editingTxId = null; 
-        let initialLoadTx = true; // FIX: Mencegah error render saat pertama kali dimuat
+        let initialLoadTx = true;
         
         let currentWalletSelectTarget = '';
         const CATEGORIES = ["Makanan & Minuman", "Transportasi", "Belanja", "Tagihan & Cicilan", "Rumah Tangga", "Kesehatan", "Pendidikan", "Hiburan & Hobi", "Kecantikan & Pakaian", "Sedekah / Donasi", "Investasi & Asuransi", "Lainnya"];
@@ -722,48 +833,29 @@
         };
         const formatRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
 
-        // FITUR BARU: Push Notification Terintegrasi dengan Cloudflare Worker
         async function sendPushNotificationToFamily(amount, desc, type) {
-            // Hindari notifikasi di mode preview lokal
             const isLocalhost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.hostname.includes('csb.app');
             if (isLocalhost) return;
-
-            if (!currentFamilyMembers || currentFamilyMembers.length <= 1) return; // Abaikan jika sendiri
+            if (!currentFamilyMembers || currentFamilyMembers.length <= 1) return;
             
             const me = currentFamilyMembers.find(m => m.uid === currentUser.uid);
             const myName = (me && me.displayName) ? me.displayName : "Anggota Keluarga";
-
-            // Kumpulkan target UID (Selain pengirim)
             const targetUids = currentFamilyMembers.filter(m => m.uid !== currentUser.uid).map(m => m.uid);
             if (targetUids.length === 0) return;
 
-            // URL Worker Cloudflare Anda (Rahasia API Key aman di dalam Worker ini)
             const WORKER_URL = "https://notifkeuangan.aizzanras.workers.dev/"; 
-            
             try {
-                // Tembak request tanpa harus menunggu respon selesai (background)
                 fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        amount: amount,
-                        desc: desc,
-                        type: type,
-                        senderName: myName,
-                        targetUids: targetUids
-                    })
-                }).catch(err => console.error("Worker error:", err)); // Tangkap diam-diam jika gagal
-            } catch (error) {
-                console.error("Gagal memanggil Worker:", error);
-            }
+                    body: JSON.stringify({ amount, desc, type, senderName: myName, targetUids })
+                }).catch(err => console.error("Worker error:", err));
+            } catch (error) { console.error("Gagal memanggil Worker:", error); }
         }
 
-        // FITUR BARU: Mendapatkan URL Ikon/Logo Dompet secara cerdas
         window.getWalletIcon = (name) => {
             const nameLower = name.toLowerCase();
             let matchedKey = '';
-
-            // Smart Matching: Deteksi kata kunci nama bank/ewallet yang umum
             if (nameLower.includes('bca')) matchedKey = 'bca';
             else if (nameLower.includes('mandiri')) matchedKey = 'mandiri';
             else if (nameLower.includes('bsi')) matchedKey = 'bsi';
@@ -777,12 +869,7 @@
             else if (nameLower.includes('ovo')) matchedKey = 'ovo';
             else if (nameLower.includes('linkaja')) matchedKey = 'linkaja';
             else if (nameLower.includes('tunai') || nameLower.includes('cash')) matchedKey = 'tunai';
-            else {
-                // Jika tidak ada kecocokan khusus, gunakan nama yang dibersihkan (opsional)
-                matchedKey = nameLower.replace(/[^a-z0-9]/g, '');
-            }
-
-             // Return URL yang memanggil gambar langsung di root web Anda
+            else matchedKey = nameLower.replace(/[^a-z0-9]/g, '');
             return `/${matchedKey}.png`;
         };
 
@@ -798,7 +885,7 @@
             if (nameLower.includes('jago')) return 'jago';
             if (nameLower.includes('seabank') || nameLower.includes('sea bank')) return 'seabank';
             if (nameLower.includes('tunai') || nameLower.includes('cash')) return 'tunai';
-            return ''; // Kembalikan kosong jika tidak ada yang cocok
+            return '';
         };
 
         window.toggleDarkMode = () => {
@@ -939,7 +1026,7 @@
             try {
                 await updateDoc(doc(db, 'families', familyId), { budgets: newBudgets });
                 familyBudgets = newBudgets;
-                renderData(); // Re-render untuk update UI Budget
+                renderData(); 
                 window.hideModal('budget-edit-modal');
                 showToast("Anggaran berhasil disimpan!");
             } catch (e) {
@@ -1005,7 +1092,6 @@
             document.getElementById('topup-goal-title').innerText = name;
             document.getElementById('topup-amount').value = '';
             
-            // Reset Wallet Selector
             document.getElementById('topup-wallet').value = '';
             document.getElementById('label-topup-wallet').textContent = 'Pilih Rekening';
             
@@ -1021,12 +1107,10 @@
                 const amount = parseInt(document.getElementById('topup-amount').value);
                 const wallet = document.getElementById('topup-wallet').value;
 
-                // 1. Tambah saldo di goal
                 await updateDoc(doc(db, 'families', familyId, 'goals', id), {
                     collected: increment(amount)
                 });
 
-                // 2. Potong saldo dompet (Buat transaksi expense khusus)
                 await addDoc(collection(db, 'families', familyId, 'transactions'), {
                     type: 'expense', amount: amount, desc: `Nabung: ${name}`, category: 'Lainnya',
                     wallet: wallet, timestamp: new Date().toISOString(), userId: currentUser.uid, isGoalTopup: true
@@ -1089,7 +1173,6 @@
             document.getElementById('modal-tx-title').textContent = "Catat Transaksi";
             document.getElementById('btn-submit').textContent = "Simpan Transaksi";
             
-            // Reset Wallet Selector UI
             document.getElementById('label-tx-wallet').textContent = 'Pilih Dompet';
             document.getElementById('label-tx-from-wallet').textContent = 'Asal';
             document.getElementById('label-tx-to-wallet').textContent = 'Tujuan';
@@ -1222,18 +1305,17 @@
                 const bgClass = isSelected ? 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-600 shadow-sm' : 'bg-white dark:bg-slate-950 border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-900';
                 const checkIcon = isSelected ? `<svg class="w-6 h-6 text-slate-700 dark:text-slate-300 ml-auto" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1.177-7.86l-2.765-2.764a.996.996 0 10-1.41 1.41l3.47 3.47a.996.996 0 001.41 0l6.19-6.19a.996.996 0 10-1.41-1.41l-5.485 5.484z" clip-rule="evenodd"/></svg>` : '';
                 
-                // Menggunakan Smart Icon dengan Fallback CSS
                 const iconUrl = window.getWalletIcon(walletName);
 
                 container.innerHTML += `
                     <button type="button" onclick="window.selectWallet('${walletName}')" class="w-full flex items-center gap-4 p-4 rounded-[20px] border transition-all text-left ${bgClass}">
                         <div class="relative w-12 h-12 shrink-0">
-                            <!-- Inisial Teks (Muncul jika gambar tidak ada/gagal) -->
+                            <!-- Inisial Teks -->
                             <div class="absolute inset-0 rounded-xl flex items-center justify-center font-black text-xs bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
                                 ${initials}
                             </div>
-                            <!-- Gambar Logo (Hanya terlihat jika berhasil diload) -->
-                            <img src="${iconUrl}" onerror="this.style.opacity='0'" onload="this.style.opacity='1'" class="absolute inset-0 w-full h-full object-contain rounded-xl opacity-0 transition-opacity duration-300 z-10 bg-white" />
+                            <!-- Gambar Logo -->
+                            <img src="${iconUrl}" onerror="this.style.opacity='0'" onload="this.style.opacity='1'" class="absolute inset-0 w-full h-full object-contain rounded-xl opacity-0 transition-opacity duration-300 z-10 bg-white p-1" />
                         </div>
                         <div class="flex-1 overflow-hidden">
                             <p class="font-bold text-[15px] text-slate-900 dark:text-white truncate">${walletName}</p>
@@ -1274,7 +1356,6 @@
                     const initials = data.desc.substring(0, 2).toUpperCase();
                     const receiptBtn = data.receiptBase64 ? `<button onclick="window.viewReceipt('${data.receiptBase64}')" class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded mt-1 font-bold">Struk</button>` : '';
                     
-                    // PENGECEKAN HAK AKSES ADMIN
                     const isAdmin = currentUser && (currentUser.uid === familyAdminUid);
                     const isMyTx = currentUser && (currentUser.uid === data.userId);
                     
@@ -1332,29 +1413,35 @@
 
             sorted.forEach((name, index) => {
                 const brandClass = window.getWalletBrandClass(name);
-                const colorClass = brandClass ? `cc-card ${brandClass}` : (index % 2 === 0 ? 'cc-card' : 'cc-card green');
+                const colorClass = brandClass ? `cc-card ${brandClass}` : 'cc-card default';
                 
                 const initials = name.substring(0, 2).toUpperCase();
                 const iconUrl = window.getWalletIcon(name);
-
+                
+                // Menentukan warna teks putih (untuk tema gelap fallback) atau mewarisi warna dari CSS (untuk tema terang)
+                const textStyleClass = colorClass.includes('default') ? 'text-white' : 'text-current';
+                // Warna label Total Balance
+                const labelColorClass = colorClass.includes('default') ? 'text-white/70' : 'opacity-70';
+                
                 container.innerHTML += `
-                <div class="min-w-[260px] ${colorClass} rounded-[24px] p-6 text-white shrink-0 shadow-lg shadow-slate-200 dark:shadow-none transition-all">
-                    <div class="flex justify-between items-start mb-6">
+                <div class="min-w-[280px] ${colorClass} rounded-[28px] p-7 shrink-0 transition-all relative">
+                    <div class="flex justify-between items-start mb-8 relative z-10">
                         <div class="flex items-center gap-3">
-                            <div class="relative w-10 h-10 shrink-0">
-                                <!-- Inisial Teks -->
-                                <div class="absolute inset-0 rounded-full flex items-center justify-center font-black text-[13px] bg-white/20 text-white backdrop-blur-sm shadow-sm">
+                            <!-- Logo Container -->
+                            <div class="relative w-[72px] h-[36px] shrink-0 flex items-center justify-start">
+                                <!-- Inisial Teks (Fallback) -->
+                                <div class="absolute inset-0 flex items-center justify-start font-black text-lg ${labelColorClass}">
                                     ${initials}
                                 </div>
-                                <!-- Gambar Logo -->
-                                <img src="${iconUrl}" onerror="this.style.opacity='0'" onload="this.style.opacity='1'" class="absolute inset-0 w-full h-full object-contain rounded-full opacity-0 transition-opacity duration-300 z-10 bg-white" />
+                                <!-- Gambar Logo (Lebih besar, rasio aspect terjaga, tanpa background lingkaran) -->
+                                <img src="${iconUrl}" onerror="this.style.opacity='0'" onload="this.style.opacity='1'" class="relative w-full h-full object-contain object-left opacity-0 transition-opacity duration-300 z-10" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
                             </div>
-                            <span class="font-bold text-[15px] tracking-wide">${name}</span>
                         </div>
-                        <svg class="w-7 h-7 opacity-70" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4V4zm2 2v2h4V6H6zm6 0v2h4V6h-4zm6 0v2h2V6h-2zM6 10v2h12v-2H6zm0 4v2h4v-2H6zm6 0v2h4v-2h-4zm6 0v2h2v-2h-2zM6 18h12v-2H6v2z"/></svg>
                     </div>
-                    <p class="text-[11px] text-white/60 font-semibold mb-1 uppercase tracking-widest">Total Balance</p>
-                    <p class="font-black text-2xl tracking-tighter">${formatRp(allWalletsData[name])}</p>
+                    <div class="mt-8 relative z-10 ${textStyleClass}">
+                        <p class="text-[10px] font-extrabold mb-1 uppercase tracking-[0.2em] ${labelColorClass}">Total Balance</p>
+                        <p class="font-black text-3xl tracking-tighter" style="text-shadow: 0 2px 10px rgba(255,255,255,0.2);">${formatRp(allWalletsData[name])}</p>
+                    </div>
                 </div>`;
             });
         }
@@ -1371,12 +1458,10 @@
                     <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 rounded-[20px] flex justify-between items-center shadow-sm transition-colors">
                         <div class="flex items-center gap-4">
                             <div class="relative w-12 h-12 shrink-0">
-                                <!-- Inisial Teks -->
                                 <div class="absolute inset-0 rounded-xl flex items-center justify-center font-black text-xs bg-slate-900 dark:bg-white text-white dark:text-slate-900">
                                     ${initials}
                                 </div>
-                                <!-- Gambar Logo -->
-                                <img src="${iconUrl}" onerror="this.style.opacity='0'" onload="this.style.opacity='1'" class="absolute inset-0 w-full h-full object-contain rounded-xl opacity-0 transition-opacity duration-300 z-10 bg-white" />
+                                <img src="${iconUrl}" onerror="this.style.opacity='0'" onload="this.style.opacity='1'" class="absolute inset-0 w-full h-full object-contain rounded-xl opacity-0 transition-opacity duration-300 z-10 bg-white p-1" />
                             </div>
                             <p class="font-bold text-slate-900 dark:text-white text-[15px]">${name}</p>
                         </div>
@@ -1461,7 +1546,6 @@
                     await addDoc(collection(db, 'families', familyId, 'transactions'), docData);
                     showToast("Transaksi berhasil disimpan!");
                     
-                    // Trigger Notifikasi Push ke anggota keluarga lain via Cloudflare Worker
                     sendPushNotificationToFamily(amount, desc, currentTxType);
                 }
 
@@ -1514,12 +1598,10 @@
         async function upsertMemberInfo() {
             if (!currentUser || !familyId) return;
             try {
-                // Update doc user, tidak menimpa displayName yang sudah diset manual jika ada
                 const memberRef = doc(db, 'families', familyId, 'members', currentUser.uid);
                 const memberSnap = await getDoc(memberRef);
                 const currentName = memberSnap.exists() ? memberSnap.data().displayName : (currentUser.displayName || null);
                 
-                // Isi input dengan nama yang tersimpan
                 const inputEl = document.getElementById('input-user-displayname');
                 if (inputEl && !inputEl.value && currentName) inputEl.value = currentName;
 
@@ -1664,7 +1746,6 @@
                     document.getElementById('header-family-name').innerHTML = `${name} 👋`;
                     document.getElementById('input-family-name').value = name;
                     
-                    // Hindari render ulang yang tidak perlu
                     if (!initialLoadTx) renderData(); 
                     if(currentFamilyMembers.length > 0) renderFamilyMembers(currentFamilyMembers);
                 }
@@ -1685,16 +1766,13 @@
                 snapshot.forEach(d => rawTransactions.push({ id: d.id, ...d.data() })); 
                 
                 renderData();
-                initialLoadTx = false; // Matikan bendera initial load
+                initialLoadTx = false;
 
-                // IN-APP TOAST NOTIFICATION (Pop-up di layar)
                 if (!isFirstLoad) {
                     snapshot.docChanges().forEach((change) => {
                         if (change.type === "added") {
                             const newTx = change.doc.data();
-                            // Jangan munculkan popup kalau diri kita sendiri yang ngetik
                             if (currentUser && newTx.userId !== currentUser.uid) {
-                                // Cari nama anggota yang ngetik
                                 const sender = currentFamilyMembers.find(m => m.uid === newTx.userId);
                                 const senderName = sender ? (sender.displayName || 'Anggota keluarga') : 'Seseorang';
                                 const tipeMsg = newTx.type === 'expense' ? 'pengeluaran' : (newTx.type === 'income' ? 'pemasukan' : 'mutasi');
