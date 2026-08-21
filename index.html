@@ -71,143 +71,82 @@
         .cc-card {
             position: relative;
             overflow: hidden;
-            background-color: #ffffff; /* Default base */
+            background-color: #ffffff;
             z-index: 1;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* Default fallback (Dark Theme) */
-        .cc-card.default {
-             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-             color: white;
-        }
+        .cc-card.default { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; }
 
-        /* --- MANDIRI PREMIUM --- */
         .cc-card.mandiri {
-            /* Warna dominan terang (emas pudar/putih) ke arah navy gelap di kanan bawah */
-            background: 
-                /* Lengkungan emas bersinar di tengah */
-                radial-gradient(circle at 70% 80%, rgba(255, 193, 7, 0.8) 0%, transparent 40%),
-                /* Warna utama: Terang krem di kiri atas, bergeser ke Navy pekat di kanan bawah */
+            background: radial-gradient(circle at 70% 80%, rgba(255, 193, 7, 0.8) 0%, transparent 40%),
                 linear-gradient(135deg, #FFF9EB 0%, #FFEFC2 35%, #051A49 60%, #020B24 100%);
-            color: #051A49; /* Teks navy agar kontras di area terang */
+            color: #051A49;
         }
-        /* Efek garis lengkung emas (ombak) */
         .cc-card.mandiri::before {
-            content: '';
-            position: absolute;
-            bottom: -20%; right: -10%;
-            width: 120%; height: 120%;
-            border-radius: 50%;
-            box-shadow: inset 0 0 0 1px rgba(255, 200, 0, 0.4), inset 0 0 20px rgba(255, 200, 0, 0.2);
-            z-index: -1;
-            transform: rotate(-15deg);
+            content: ''; position: absolute; bottom: -20%; right: -10%; width: 120%; height: 120%;
+            border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255, 200, 0, 0.4), inset 0 0 20px rgba(255, 200, 0, 0.2);
+            z-index: -1; transform: rotate(-15deg);
         }
 
-        /* --- BSI PREMIUM --- */
         .cc-card.bsi {
-            /* Warna dominan terang ke arah hijau/cyan gelap di kanan bawah */
-            background: 
-                /* Lengkungan emas bersinar */
-                radial-gradient(circle at 80% 90%, rgba(255, 215, 0, 0.9) 0%, transparent 30%),
-                /* Warna utama: Putih kehijauan di kiri atas, bergeser ke cyan/tosca gelap */
+            background: radial-gradient(circle at 80% 90%, rgba(255, 215, 0, 0.9) 0%, transparent 30%),
                 linear-gradient(135deg, #E8F5F5 0%, #D0EBEA 30%, #008882 60%, #004D49 100%);
             color: #00605B;
         }
         .cc-card.bsi::before {
-            content: '';
-            position: absolute;
-            bottom: -30%; right: -20%;
-            width: 140%; height: 140%;
-            border-radius: 50%;
-            box-shadow: inset 0 0 0 2px rgba(255, 215, 0, 0.5);
-            z-index: -1;
-            transform: rotate(-20deg);
+            content: ''; position: absolute; bottom: -30%; right: -20%; width: 140%; height: 140%;
+            border-radius: 50%; box-shadow: inset 0 0 0 2px rgba(255, 215, 0, 0.5);
+            z-index: -1; transform: rotate(-20deg);
         }
 
-        /* --- SHOPEEPAY PREMIUM --- */
         .cc-card.shopeepay {
-            /* Transisi lembut putih/krem ke oranye menyala */
-            background: 
-                /* Lengkungan oranye terang */
-                radial-gradient(ellipse at 80% 120%, #FF8A00 0%, transparent 60%),
+            background: radial-gradient(ellipse at 80% 120%, #FF8A00 0%, transparent 60%),
                 linear-gradient(135deg, #FFF0E6 0%, #FFE0CC 40%, #FF5E00 70%, #E64A19 100%);
             color: #D84315;
         }
         .cc-card.shopeepay::before {
-            content: '';
-            position: absolute;
-            bottom: -10%; right: -10%;
-            width: 150%; height: 100%;
-            border-radius: 50% 50% 0 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.6);
-            z-index: -1;
-            transform: rotate(-10deg);
+            content: ''; position: absolute; bottom: -10%; right: -10%; width: 150%; height: 100%;
+            border-radius: 50% 50% 0 0; border-top: 1px solid rgba(255, 255, 255, 0.6); z-index: -1; transform: rotate(-10deg);
         }
         .cc-card.shopeepay::after {
-            content: '';
-            position: absolute;
-            bottom: -20%; right: -5%;
-            width: 130%; height: 90%;
-            border-radius: 50% 50% 0 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            z-index: -1;
-            transform: rotate(-15deg);
+            content: ''; position: absolute; bottom: -20%; right: -5%; width: 130%; height: 90%;
+            border-radius: 50% 50% 0 0; border-top: 1px solid rgba(255, 255, 255, 0.3); z-index: -1; transform: rotate(-15deg);
         }
 
-        /* --- BCA PREMIUM --- */
         .cc-card.bca {
-            background: 
-                radial-gradient(circle at 75% 85%, rgba(0, 102, 255, 0.6) 0%, transparent 40%),
+            background: radial-gradient(circle at 75% 85%, rgba(0, 102, 255, 0.6) 0%, transparent 40%),
                 linear-gradient(135deg, #F0F5FF 0%, #DCE8FF 35%, #0044B3 65%, #00225A 100%);
             color: #003380;
         }
         .cc-card.bca::before {
-            content: '';
-            position: absolute;
-            bottom: -25%; right: -15%;
-            width: 130%; height: 130%;
-            border-radius: 50%;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
-            z-index: -1;
+            content: ''; position: absolute; bottom: -25%; right: -15%; width: 130%; height: 130%;
+            border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3); z-index: -1;
         }
 
-        /* --- JAGO PREMIUM --- */
         .cc-card.jago {
-            background: 
-                radial-gradient(circle at 80% 90%, rgba(255, 150, 0, 0.8) 0%, transparent 40%),
+            background: radial-gradient(circle at 80% 90%, rgba(255, 150, 0, 0.8) 0%, transparent 40%),
                 linear-gradient(135deg, #FFF5E6 0%, #FFEBCC 35%, #F78D1E 65%, #C26B0B 100%);
             color: #B35F00;
         }
         .cc-card.jago::before {
-            content: '';
-            position: absolute;
-            bottom: -30%; right: -10%;
-            width: 140%; height: 140%;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            z-index: -1;
+            content: ''; position: absolute; bottom: -30%; right: -10%; width: 140%; height: 140%;
+            border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); z-index: -1;
         }
 
-        /* Generic colors for others based on brand */
         .cc-card.gopay { background: linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 40%, #00A5CF 70%, #007494 100%); color: #00607A; }
         .cc-card.ovo { background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 40%, #4D2D8F 70%, #311A60 100%); color: #3A1B76; }
         .cc-card.dana { background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 40%, #118EE0 70%, #0B5C94 100%); color: #094B7A; }
         .cc-card.seabank { background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 40%, #FF7854 70%, #D8432A 100%); color: #C23016; }
         .cc-card.tunai, .cc-card.green { background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 40%, #059669 70%, #035A3F 100%); color: #024B34; }
         
-        /* Tambahkan wave default untuk sisa card */
+        /* FIX: Tambahkan gradient untuk class .purple agar teks putih bisa terlihat! */
+        .cc-card.purple { background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 40%, #6D28D9 70%, #4C1D95 100%); color: white; }
+
         .cc-card:not(.mandiri):not(.bsi):not(.shopeepay):not(.bca):not(.default)::after {
-            content: '';
-            position: absolute;
-            bottom: -40%;
-            right: -20%;
-            width: 150%;
-            height: 150%;
-            border-radius: 45%;
-            z-index: -1;
-            background: radial-gradient(circle at 100% 100%, rgba(255,255,255,0.15) 0%, transparent 60%);
+            content: ''; position: absolute; bottom: -40%; right: -20%; width: 150%; height: 150%;
+            border-radius: 45%; z-index: -1; background: radial-gradient(circle at 100% 100%, rgba(255,255,255,0.15) 0%, transparent 60%);
         }
 
         .pb-safe { padding-bottom: calc(80px + var(--safe-bottom)); }
@@ -409,7 +348,7 @@
                             <option value="Lainnya">Lainnya</option>
                         </select>
                     </div>
-                    <!-- Single Wallet Selection (Expense/Income) -->
+                    
                     <div id="single-wallet-container">
                         <label class="text-[12px] font-bold text-slate-500 dark:text-slate-400 mb-1.5 block">Pilih Rekening / Dompet</label>
                         <input type="hidden" id="tx-wallet" required>
@@ -419,7 +358,6 @@
                         </button>
                     </div>
 
-                    <!-- Transfer Wallets Selection -->
                     <div id="transfer-wallets-container" class="hidden grid-cols-2 gap-4">
                         <div>
                             <label class="text-[12px] font-bold text-slate-500 dark:text-slate-400 mb-1.5 block">Dari Rekening</label>
@@ -503,7 +441,6 @@
                     <button onclick="window.openBudgetModal()" class="text-[12px] font-bold text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 rounded-lg">Atur Limit</button>
                 </div>
                 <div id="budgets-container" class="space-y-4">
-                    <!-- Progress Budget diisi oleh JS -->
                     <div class="text-center py-4 text-slate-400 text-sm">Menghitung anggaran...</div>
                 </div>
             </div>
@@ -515,7 +452,6 @@
         <div class="modal-content bg-white dark:bg-slate-900 w-full max-w-sm rounded-[32px] p-6 shadow-2xl relative max-h-[90vh] flex flex-col">
             <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Atur Anggaran Maksimal</h2>
             <div class="flex-1 overflow-y-auto hide-scrollbar space-y-4 pb-4" id="budget-edit-form">
-                <!-- Form Input per Kategori diisi JS -->
             </div>
             <div class="pt-4 flex gap-3 border-t border-slate-100 dark:border-slate-800">
                 <button onclick="window.hideModal('budget-edit-modal')" class="flex-1 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold">Batal</button>
@@ -583,7 +519,6 @@
             </div>
             
             <div class="flex-1 overflow-y-auto p-6 space-y-3 pb-safe hide-scrollbar" id="wallet-selector-list">
-                <!-- Daftar Dompet Di-inject oleh JS -->
             </div>
 
             <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 shrink-0">
@@ -1048,12 +983,18 @@
                 const target = goal.target || 1;
                 const percent = Math.min((collected / target) * 100, 100).toFixed(0);
                 
+                // MENAMBAHKAN FITUR DELETE DI SINI
                 container.innerHTML += `
                 <div class="min-w-[240px] cc-card purple rounded-[24px] p-5 text-white shrink-0 shadow-lg shadow-indigo-900/20">
                     <div class="flex justify-between items-start mb-4">
                         <span class="font-bold text-[14px] leading-tight w-2/3">${goal.name}</span>
-                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-black text-sm backdrop-blur-md">
-                            ${percent}%
+                        <div class="flex gap-2 items-center">
+                            <button onclick="window.deleteGoal('${goal.id}')" class="w-7 h-7 rounded-full bg-white/10 hover:bg-red-500/80 flex items-center justify-center transition-colors" title="Hapus Impian">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                            <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center font-black text-xs backdrop-blur-md">
+                                ${percent}%
+                            </div>
                         </div>
                     </div>
                     
@@ -1065,11 +1006,23 @@
                             <p class="text-[9px] text-white/60 font-bold uppercase tracking-wider mb-0.5">Terkumpul</p>
                             <p class="font-black text-[13px]">${formatRp(collected)}</p>
                         </div>
-                        <button onclick="window.openTopupGoal('${goal.id}', '${goal.name}')" class="bg-white text-indigo-900 text-[10px] font-black px-3 py-1.5 rounded-lg active:scale-95 transition-transform">+ Isi</button>
+                        <button onclick="window.openTopupGoal('${goal.id}', '${goal.name}')" class="bg-white text-indigo-900 text-[10px] font-black px-3 py-1.5 rounded-lg active:scale-95 transition-transform shadow-sm">+ Isi</button>
                     </div>
                 </div>`;
             });
         }
+        
+        // FUNGSI BARU UNTUK MENGHAPUS IMPIAN
+        window.deleteGoal = async (id) => {
+            if(confirm("Hapus tabungan impian ini? (Dana yang sudah tercatat sebagai pengeluaran untuk impian ini tidak akan otomatis kembali ke saldo)")) {
+                try {
+                    await deleteDoc(doc(db, 'families', familyId, 'goals', id));
+                    showToast("Tabungan Impian berhasil dihapus!");
+                } catch(e) {
+                    showToast("Gagal menghapus", "error");
+                }
+            }
+        };
 
         window.saveGoal = async (e) => {
             e.preventDefault();
@@ -1418,12 +1371,9 @@
                 const iconUrl = window.getWalletIcon(name);
                 const safeId = "fb-" + Math.random().toString(36).substring(7);
                 
-                // Menentukan warna teks putih (untuk tema gelap fallback) atau mewarisi warna dari CSS (untuk tema terang)
                 const textStyleClass = colorClass.includes('default') ? 'text-white' : 'text-current';
-                // Warna label Total Balance dan separator
                 const labelColorClass = colorClass.includes('default') ? 'text-white/70' : 'opacity-70';
                 
-                // Logika Cerdas: Cek apakah nama rekening hanyak "Bank" saja atau mengandung Nomor Rekening / Teks tambahan
                 const normalizedName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
                 const isJustBrand = brandClass && normalizedName === brandClass;
                 
@@ -1438,7 +1388,6 @@
                 container.innerHTML += `
                 <div class="min-w-[280px] ${colorClass} rounded-[28px] p-7 shrink-0 transition-all relative">
                     <div class="flex items-center mb-8 relative z-10 h-[32px]">
-                        <!-- Menampilkan Logo, jika tidak ditemukan baru tampilkan fallback inisial -->
                         <img src="${iconUrl}" onerror="this.style.display='none'; document.getElementById('${safeId}').style.display='flex';" class="h-full w-auto object-contain object-left drop-shadow-sm" />
                         
                         <div id="${safeId}" style="display:none;" class="h-full items-center justify-center font-black text-xl ${labelColorClass}">
