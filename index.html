@@ -1301,6 +1301,7 @@
                 const balance = allWalletsData[walletName] || 0;
                 const isSelected = currentValue === walletName;
                 const initials = walletName.substring(0, 2).toUpperCase();
+                const safeId = "fs-" + Math.random().toString(36).substring(7);
                 
                 const bgClass = isSelected ? 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-600 shadow-sm' : 'bg-white dark:bg-slate-950 border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-900';
                 const checkIcon = isSelected ? `<svg class="w-6 h-6 text-slate-700 dark:text-slate-300 ml-auto" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1.177-7.86l-2.765-2.764a.996.996 0 10-1.41 1.41l3.47 3.47a.996.996 0 001.41 0l6.19-6.19a.996.996 0 10-1.41-1.41l-5.485 5.484z" clip-rule="evenodd"/></svg>` : '';
@@ -1309,13 +1310,11 @@
 
                 container.innerHTML += `
                     <button type="button" onclick="window.selectWallet('${walletName}')" class="w-full flex items-center gap-4 p-4 rounded-[20px] border transition-all text-left ${bgClass}">
-                        <div class="relative w-12 h-12 shrink-0">
-                            <!-- Inisial Teks -->
-                            <div class="absolute inset-0 rounded-xl flex items-center justify-center font-black text-xs bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
+                        <div class="relative w-12 h-12 shrink-0 flex items-center justify-center bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+                            <img src="${iconUrl}" onerror="this.style.display='none'; document.getElementById('${safeId}').style.display='flex';" class="w-full h-full object-contain p-1.5 z-10 drop-shadow-sm" />
+                            <div id="${safeId}" style="display:none;" class="absolute inset-0 items-center justify-center font-black text-xs bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
                                 ${initials}
                             </div>
-                            <!-- Gambar Logo -->
-                            <img src="${iconUrl}" onerror="this.style.opacity='0'" onload="this.style.opacity='1'" class="absolute inset-0 w-full h-full object-contain rounded-xl opacity-0 transition-opacity duration-300 z-10 bg-white p-1" />
                         </div>
                         <div class="flex-1 overflow-hidden">
                             <p class="font-bold text-[15px] text-slate-900 dark:text-white truncate">${walletName}</p>
@@ -1417,26 +1416,36 @@
                 
                 const initials = name.substring(0, 2).toUpperCase();
                 const iconUrl = window.getWalletIcon(name);
+                const safeId = "fb-" + Math.random().toString(36).substring(7);
                 
                 // Menentukan warna teks putih (untuk tema gelap fallback) atau mewarisi warna dari CSS (untuk tema terang)
                 const textStyleClass = colorClass.includes('default') ? 'text-white' : 'text-current';
-                // Warna label Total Balance
+                // Warna label Total Balance dan separator
                 const labelColorClass = colorClass.includes('default') ? 'text-white/70' : 'opacity-70';
+                
+                // Logika Cerdas: Cek apakah nama rekening hanyak "Bank" saja atau mengandung Nomor Rekening / Teks tambahan
+                const normalizedName = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const isJustBrand = brandClass && normalizedName === brandClass;
+                
+                let customNameHtml = '';
+                if (!isJustBrand) {
+                    customNameHtml = `
+                        <div class="h-4 w-[1px] bg-current opacity-30 mx-3"></div>
+                        <span class="font-bold text-[14px] tracking-wide ${labelColorClass} truncate max-w-[130px]">${name}</span>
+                    `;
+                }
                 
                 container.innerHTML += `
                 <div class="min-w-[280px] ${colorClass} rounded-[28px] p-7 shrink-0 transition-all relative">
-                    <div class="flex justify-between items-start mb-8 relative z-10">
-                        <div class="flex items-center gap-3">
-                            <!-- Logo Container -->
-                            <div class="relative w-[72px] h-[36px] shrink-0 flex items-center justify-start">
-                                <!-- Inisial Teks (Fallback) -->
-                                <div class="absolute inset-0 flex items-center justify-start font-black text-lg ${labelColorClass}">
-                                    ${initials}
-                                </div>
-                                <!-- Gambar Logo (Lebih besar, rasio aspect terjaga, tanpa background lingkaran) -->
-                                <img src="${iconUrl}" onerror="this.style.opacity='0'" onload="this.style.opacity='1'" class="relative w-full h-full object-contain object-left opacity-0 transition-opacity duration-300 z-10" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
-                            </div>
+                    <div class="flex items-center mb-8 relative z-10 h-[32px]">
+                        <!-- Menampilkan Logo, jika tidak ditemukan baru tampilkan fallback inisial -->
+                        <img src="${iconUrl}" onerror="this.style.display='none'; document.getElementById('${safeId}').style.display='flex';" class="h-full w-auto object-contain object-left drop-shadow-sm" />
+                        
+                        <div id="${safeId}" style="display:none;" class="h-full items-center justify-center font-black text-xl ${labelColorClass}">
+                            ${initials}
                         </div>
+                        
+                        ${customNameHtml}
                     </div>
                     <div class="mt-8 relative z-10 ${textStyleClass}">
                         <p class="text-[10px] font-extrabold mb-1 uppercase tracking-[0.2em] ${labelColorClass}">Total Balance</p>
@@ -1453,15 +1462,16 @@
             sorted.forEach(name => {
                 const initials = name.substring(0,2).toUpperCase();
                 const iconUrl = window.getWalletIcon(name);
+                const safeId = "fw-" + Math.random().toString(36).substring(7);
 
                 container.innerHTML += `
                     <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 rounded-[20px] flex justify-between items-center shadow-sm transition-colors">
                         <div class="flex items-center gap-4">
-                            <div class="relative w-12 h-12 shrink-0">
-                                <div class="absolute inset-0 rounded-xl flex items-center justify-center font-black text-xs bg-slate-900 dark:bg-white text-white dark:text-slate-900">
+                            <div class="relative w-12 h-12 shrink-0 flex items-center justify-center bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+                                <img src="${iconUrl}" onerror="this.style.display='none'; document.getElementById('${safeId}').style.display='flex';" class="w-full h-full object-contain p-1.5 z-10 drop-shadow-sm" />
+                                <div id="${safeId}" style="display:none;" class="absolute inset-0 items-center justify-center font-black text-xs bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
                                     ${initials}
                                 </div>
-                                <img src="${iconUrl}" onerror="this.style.opacity='0'" onload="this.style.opacity='1'" class="absolute inset-0 w-full h-full object-contain rounded-xl opacity-0 transition-opacity duration-300 z-10 bg-white p-1" />
                             </div>
                             <p class="font-bold text-slate-900 dark:text-white text-[15px]">${name}</p>
                         </div>
