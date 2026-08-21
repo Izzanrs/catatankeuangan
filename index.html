@@ -68,19 +68,37 @@
         #toast-container { transition: transform 0.3s ease-in-out, opacity 0.3s; transform: translateY(-150%); opacity: 0; }
         #toast-container.show { transform: translateY(0); opacity: 1; }
         
-        .cc-card.green { background: linear-gradient(135deg, #047857 0%, #064e3b 100%); }
-        .cc-card.purple { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); }
+        /* PREMIUM CARD GRADIENTS */
+        /* Default / Tunai (Emerald Green with Light Green Accent) */
+        .cc-card.green, .cc-card.tunai { background: linear-gradient(135deg, #036952 30%, #059669 70%, #6EE7B7 130%); }
+        .cc-card.purple { background: linear-gradient(135deg, #4c1d95 30%, #6d28d9 70%, #c4b5fd 130%); }
         
-        .cc-card.bca { background: linear-gradient(135deg, #005baa 0%, #003b6f 100%); }
-        .cc-card.mandiri { background: linear-gradient(135deg, #0b1c5c 0%, #1e3a8a 100%); }
-        .cc-card.bsi { background: linear-gradient(135deg, #00aeb5 0%, #006b6f 100%); }
-        .cc-card.shopeepay { background: linear-gradient(135deg, #ee4d2d 0%, #c4381b 100%); }
-        .cc-card.gopay { background: linear-gradient(135deg, #00a5cf 0%, #007d9e 100%); }
-        .cc-card.ovo { background: linear-gradient(135deg, #4c2a86 0%, #351d5e 100%); }
-        .cc-card.dana { background: linear-gradient(135deg, #118ee0 0%, #0963a5 100%); }
-        .cc-card.jago { background: linear-gradient(135deg, #f78d1e 0%, #d47413 100%); }
-        .cc-card.seabank { background: linear-gradient(135deg, #ff7854 0%, #d95634 100%); }
-        .cc-card.tunai { background: linear-gradient(135deg, #047857 0%, #064e3b 100%); }
+        /* BCA (Deep Blue with Light Blue/Silver Accent) */
+        .cc-card.bca { background: linear-gradient(135deg, #004A99 30%, #0060C5 70%, #99C2FF 130%); }
+        
+        /* Mandiri (Navy Blue with Golden Yellow Accent) */
+        .cc-card.mandiri { background: linear-gradient(135deg, #0F204B 30%, #1A3673 70%, #F2A900 130%); }
+        
+        /* BSI (Teal/Cyan with Golden Yellow Accent) */
+        .cc-card.bsi { background: linear-gradient(135deg, #00858A 30%, #00B5BC 70%, #F8B400 130%); }
+        
+        /* ShopeePay (Vibrant Orange with Light Orange/White Accent) */
+        .cc-card.shopeepay { background: linear-gradient(135deg, #E65C00 30%, #FF6B00 70%, #FFD1A4 120%); }
+        
+        /* GoPay (Cyan/Blue with Light Cyan Accent) */
+        .cc-card.gopay { background: linear-gradient(135deg, #008CBF 30%, #00A5CF 70%, #99E6FF 130%); }
+        
+        /* OVO (Deep Purple with Light Purple Accent) */
+        .cc-card.ovo { background: linear-gradient(135deg, #3B236D 30%, #4D2D8F 70%, #B399FF 130%); }
+        
+        /* DANA (Solid Blue with Light Blue Accent) */
+        .cc-card.dana { background: linear-gradient(135deg, #0B64A4 30%, #118EE0 70%, #99D6FF 130%); }
+        
+        /* Jago (Deep Orange with Yellow Accent) */
+        .cc-card.jago { background: linear-gradient(135deg, #D96013 30%, #F78D1E 70%, #FFD457 130%); }
+        
+        /* SeaBank (Coral Red with Peach/White Accent) */
+        .cc-card.seabank { background: linear-gradient(135deg, #CC492B 30%, #FF7854 70%, #FFC9B9 130%); }
         
         .pb-safe { padding-bottom: calc(80px + var(--safe-bottom)); }
     </style>
